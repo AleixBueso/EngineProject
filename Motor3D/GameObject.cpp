@@ -1,3 +1,4 @@
+#pragma once
 #include "GameObject.h"
 
 GameObject::GameObject()
@@ -19,16 +20,16 @@ void GameObject::Update()
 
 }
 
-void GameObject::AddComponent(Component component)
+void GameObject::AddComponent(Component* component)
 {
-	components.push_back(&component);
+	components.push_back(component);
 }
 
 Component* GameObject::CreateComponent(component_type type, uint id_num)
 {
-	Component new_component(type, id_num);
-	components.push_back(&new_component);
-	return &new_component;
+	Component* new_component = new Component(type, id_num);
+	components.push_back(new_component);
+	return new_component;
 }
 
 bool GameObject::DeleteComponent(Component* ComponentToDelete)

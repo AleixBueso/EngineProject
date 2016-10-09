@@ -1,11 +1,12 @@
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
+
 #include "Globals.h"
 #include "Component.h"
 #include "Module.h"
 #include <stdlib.h>
 #include <vector>
-#include "Component.h"
 
-class Component;
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
 
 	void Update();
 
-	void AddComponent(Component component);
+	void AddComponent(Component* component);
 	Component* CreateComponent(component_type type, uint id_num);
 	bool DeleteComponent(Component* ComponentToDelete);
 	Component* GetById(uint id);
@@ -39,6 +40,6 @@ public:
 	vector<GameObject*> childs;
 	
 	string name;
-
-
 };
+
+#endif // GAMEOBJECT_H

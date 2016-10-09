@@ -318,6 +318,18 @@
     <ClInclude Include="GameObject Manager.h">
       <Filter>Sources\GameObject System</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorWindowModule.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -504,6 +516,18 @@
       <Filter>Sources\GameObject System</Filter>
     </ClCompile>
     <ClCompile Include="GameObject Manager.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorWindowModule.cpp">
       <Filter>Sources\GameObject System</Filter>
     </ClCompile>
   </ItemGroup>

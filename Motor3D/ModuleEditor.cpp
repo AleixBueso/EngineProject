@@ -3,6 +3,7 @@
 #include "ModuleEditor.h"
 #include "Imgui\imgui.h"
 #include "Glew\include\glew.h"
+#include "GameObject Manager.h"
 #include "glut\glut.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -43,8 +44,12 @@ update_status ModuleEditor::Update(float dt)
 	//Create the menu bar
 	if (ImGui::BeginMainMenuBar())
 	{
-		if(ImGui::BeginMenu("Tools"))
-			ImGui::EndMenu();
+		if (ImGui::BeginMenu("Tools"))
+		{
+			if (ImGui::MenuItem("GameObjects Editor"))
+				ShowGameObjects = !ShowGameObjects;
+				ImGui::EndMenu();
+		}
 
 		if (ImGui::BeginMenu("View"))
 		{
@@ -56,12 +61,12 @@ update_status ModuleEditor::Update(float dt)
 
 			ImGui::EndMenu();
 		}
-		
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Documentation"))
 				App->RequestBrowser("https://github.com/AleixBueso/Motor3D/wiki");
-				
+
 			if (ImGui::MenuItem("Download Latest"))
 				App->RequestBrowser("https://github.com/AleixBueso/Motor3D/releases");
 
@@ -79,30 +84,47 @@ update_status ModuleEditor::Update(float dt)
 
 		ImGui::EndMainMenuBar();
 	}
-	
-	if(ShowTestWindow)
+
+	if (ShowTestWindow)
 		ImGui::ShowTestWindow();
 
 	if (AboutWindow)
 	{
 		ImGui::Begin("About");
 
-				ImGui::Text("3D Engine");
-				ImGui::Text("Engine for Motors UPC");
-				if (ImGui::BeginMenu("Libraries:"))
-				{
-					ImGui::Text("ImGui");
-					ImGui::Text("Open GL3");
-					ImGui::Text("MathGeolab");
-					ImGui::Text("Bullet");
-					ImGui::Text("SDL");
-					ImGui::Text("Glew");
-					ImGui::EndMenu();
-				}
-				ImGui::MenuItem("License");
+		ImGui::Text("3D Engine");
+		ImGui::Text("Engine for Motors UPC");
+		if (ImGui::BeginMenu("Libraries:"))
+		{
+			ImGui::Text("ImGui");
+			ImGui::Text("Open GL3");
+			ImGui::Text("MathGeolab");
+			ImGui::Text("Bullet");
+			ImGui::Text("SDL");
+			ImGui::Text("Glew");
+			ImGui::EndMenu();
+		}
+		ImGui::MenuItem("License");
 
 		ImGui::End();
 	}
 
+	if (ShowGameObjects)
+		CreateHierarchy();
+
 	return UPDATE_CONTINUE;
 };
+
+void ModuleEditor::CreateMenu()
+{
+
+}
+
+void ModuleEditor::CreateHierarchy()
+{
+	ImGui::TreeNodeEx("Scene");
+	
+
+	ImGui::End();
+	
+}

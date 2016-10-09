@@ -3,8 +3,6 @@
 #include "Module.h"
 #include "GameObject.h"
 
-class GameObject;
-
 class GameObjectManager : public Module
 {
 public:
@@ -15,7 +13,7 @@ public:
 	GameObject* CreateGameObject(GameObject* parent);
 	void Delete(GameObject* GO_to_delete);
 	
-private:
+	public:
 	GameObject* root = NULL;
 
 };

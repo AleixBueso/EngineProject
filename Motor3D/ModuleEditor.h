@@ -12,9 +12,14 @@ public:
 
 	update_status Update(float dt);
 
+	void CreateMenu();
+
+	void CreateHierarchy();
+
 	bool CleanUp();
 
 	bool ShowTestWindow = false;
 	bool AboutWindow = false;
+	bool ShowGameObjects = false;
 
 };
