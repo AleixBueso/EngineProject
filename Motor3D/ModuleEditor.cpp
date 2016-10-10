@@ -141,23 +141,32 @@ void ModuleEditor::ShowChilds(GameObject* parent)
 			ShowChilds(parent->childs[i]);
 		}
 	}
+		
 }
 
 void ModuleEditor::CreateHierarchy()
 {
-	ImGui::Begin("Outliner");
+	ImGuiTreeNodeFlags outliner_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
+	ImGui::Begin("Outliner", 0, outliner_flags);
+
+	ImGui::Text("Click the Button to create an empty GameObject");
+
+	if (ImGui::Button("CreateGameObject"))
+		App->gameobject_manager->CreateGameObject(SelectedObject);
+
+	ImGui::Text("Tree: ----------------------------");
 
 	if (App->gameobject_manager->root == NULL)
 		ImGui::Text("No GameObjects on the Scene :-(");
 
 	else
 	{
-			if (ImGui::TreeNode(App->gameobject_manager->root->name.c_str()))
-			{
-				ShowChilds(App->gameobject_manager->root);
+		if (ImGui::TreeNode(App->gameobject_manager->root->name.c_str()))
+		{
+			ShowChilds(App->gameobject_manager->root);
 
-				ImGui::TreePop();
-			}
+			ImGui::TreePop();
+		}
 	}
 
 	ImGui::End();

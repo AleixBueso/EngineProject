@@ -20,6 +20,11 @@ struct MyMesh
 	uint num_uvs = 0;
 	float* uvs = nullptr;
 
+	//Normals
+	uint id_normals = 0;
+	uint num_normals = 0;
+	float* normals = nullptr;
+
 	//Texture
 	uint id_texture = 0;
 };
@@ -39,13 +44,13 @@ public:
 
 	bool LoadModel(const char* full_path);
 
-	void Load(const char* path);
+	bool Load(const char* path);
 
 	uint LoadTexture(const char* path);
 
 	void CreateCube();
 
-	vector<MyMesh> Meshes;
+	vector<MyMesh*> Meshes;
 
 	uint ImageName;
 	bool texture_enabled = false;

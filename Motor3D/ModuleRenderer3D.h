@@ -25,7 +25,8 @@ public:
 
 	void OnResize(int width, int height, float fovy);
 
-	void DrawMesh(MyMesh mesh);
+	void DrawMesh(const MyMesh* mesh);
+	bool LoadMeshBuffer(const MyMesh* mesh);
 
 public:
 

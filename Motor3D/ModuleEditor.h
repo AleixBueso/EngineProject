@@ -24,5 +24,6 @@ public:
 	bool ShowTestWindow = false;
 	bool AboutWindow = false;
 	bool ShowGameObjects = true;
+	GameObject* SelectedObject = NULL;
 
 };
