@@ -39,7 +39,7 @@ public:
 
 	bool LoadModel(const char* full_path);
 
-	vector<MyMesh> Load(const char* path);
+	void Load(const char* path);
 
 	uint LoadTexture(const char* path);
 

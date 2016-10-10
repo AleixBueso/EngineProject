@@ -47,10 +47,13 @@ update_status ModuleEditor::Update(float dt)
 		if (ImGui::BeginMenu("Tools"))
 		{
 			if (ImGui::MenuItem("GameObjects Editor"))
+			{
 				ShowGameObjects = !ShowGameObjects;
+			}
 				ImGui::EndMenu();
 		}
 
+		//View
 		if (ImGui::BeginMenu("View"))
 		{
 			if (ImGui::MenuItem("Test Window"))
@@ -62,6 +65,7 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::EndMenu();
 		}
 
+		//Help
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Documentation"))
@@ -79,15 +83,18 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::EndMenu();
 		}
 
+		 //Quit
 		if (ImGui::MenuItem("Quit"))
 			return UPDATE_STOP;
 
 		ImGui::EndMainMenuBar();
 	}
 
+	//TestWindow
 	if (ShowTestWindow)
 		ImGui::ShowTestWindow();
 
+	//AboutWindow
 	if (AboutWindow)
 	{
 		ImGui::Begin("About");
@@ -109,8 +116,12 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
+	//Outliner
 	if (ShowGameObjects)
+	{
 		CreateHierarchy();
+	}
+
 
 	return UPDATE_CONTINUE;
 };
@@ -120,11 +131,35 @@ void ModuleEditor::CreateMenu()
 
 }
 
+void ModuleEditor::ShowChilds(GameObject* parent)
+{
+	if (parent->childs.empty() == false)
+	{
+		for (uint i = 0; i < parent->childs.size(); i++)
+		{
+			ImGui::Text(parent->childs[i]->name.c_str());
+			ShowChilds(parent->childs[i]);
+		}
+	}
+}
+
 void ModuleEditor::CreateHierarchy()
 {
-	ImGui::TreeNodeEx("Scene");
-	
+	ImGui::Begin("Outliner");
+
+	if (App->gameobject_manager->root == NULL)
+		ImGui::Text("No GameObjects on the Scene :-(");
+
+	else
+	{
+			if (ImGui::TreeNode(App->gameobject_manager->root->name.c_str()))
+			{
+				ShowChilds(App->gameobject_manager->root);
+
+				ImGui::TreePop();
+			}
+	}
 
 	ImGui::End();
-	
 }
+

@@ -15,7 +15,10 @@ GameObjectManager::~GameObjectManager()
 
 GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 {
-	return new GameObject(parent);
+	GameObject* tmp = new GameObject(parent);
+	if (parent == NULL)
+		root = tmp;
+	return tmp;
 }
 
 void GameObjectManager::Delete(GameObject* GO_to_delete)

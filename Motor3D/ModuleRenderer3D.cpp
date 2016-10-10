@@ -186,22 +186,16 @@ void ModuleRenderer3D::OnResize(int width, int height, float fovy)
 void ModuleRenderer3D::DrawMesh(MyMesh mesh)
 {
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnable(GL_TEXTURE_2D);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh.id_uvs);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-		glBindTexture(GL_TEXTURE_2D, mesh.id_texture);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_indices);
-		glDrawElements(GL_TRIANGLES, mesh.num_indices, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, mesh.num_indices, GL_UNSIGNED_INT, mesh.vertices);
 
 
-		glDisable(GL_TEXTURE_2D);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
+	//glDrawElements(GL_VERTEX_ARRAY, mesh.num_indices, GL_UNSIGNED_INT, mesh.indices);
+
 }

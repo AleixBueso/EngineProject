@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-GameObject::GameObject()
+GameObject::GameObject() : name("Empty GameObject")
 {
 
 }

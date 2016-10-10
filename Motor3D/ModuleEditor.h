@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "GameObject.h"
 
 class ModuleEditor : public Module
 {
@@ -14,12 +15,14 @@ public:
 
 	void CreateMenu();
 
+	void ShowChilds(GameObject* parent);
 	void CreateHierarchy();
+
 
 	bool CleanUp();
 
 	bool ShowTestWindow = false;
 	bool AboutWindow = false;
-	bool ShowGameObjects = false;
+	bool ShowGameObjects = true;
 
 };

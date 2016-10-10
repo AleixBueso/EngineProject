@@ -26,9 +26,11 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
-	bool ret = true;	App->model_loader->LoadModel("Models/warrior.FBX");
+	bool ret = true;	App->model_loader->Load("Models/warrior.FBX");
 
 	lenna_id = App->model_loader->LoadTexture("lenna.png");
+	App->gameobject_manager->CreateGameObject()->AddChild(App->gameobject_manager->CreateGameObject());
+	
 
 	return ret;
 }

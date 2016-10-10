@@ -103,45 +103,9 @@ update_status ModuleModelLoader::Update(float dt)
 
 bool ModuleModelLoader::LoadModel(const char* full_path)
 {
-bool ret = true;
+	//MyMesh mesh;
+	return false;
 
-/*	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);	if (scene != nullptr && scene->HasMeshes())
-	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		for (uint i = 0; i < scene->mNumMeshes; i++)
-		{
-			MyMesh m;
-			m.num_vertices = scene->mMeshes[i]->mNumVertices;
-			m.vertices = new float[m.num_vertices * 3];
-			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float) * m.num_vertices * 3);
-			LOG("New mesh with %d vertices", m.num_vertices);
-
-			if (scene->mMeshes[i]->HasFaces())
-			{
-				m.num_indices = scene->mMeshes[i]->mNumFaces * 3;
-				m.indices = new uint[m.num_indices]; // assume each face is a triangle
-				for (uint k = 0; k < scene->mMeshes[i]->mNumFaces; ++k)
-				{
-					if (scene->mMeshes[k]->mFaces[k].mNumIndices != 3)
-					{
-						LOG("WARNING, geometry face with != 3 indices!");
-					}
-
-					else
-						memcpy(&m.indices[k * 3], scene->mMeshes[i]->mFaces[k].mIndices, 3 * sizeof(uint));
-				}
-			}
-		}
-
-		aiReleaseImport(scene);
-	}
-	else
-	{
-		LOG("Error loading scene %s", full_path);
-		ret = false;
-	}
-*/
-	return ret;
 }
 
 void ModuleModelLoader::CreateCube()
@@ -248,111 +212,48 @@ void ModuleModelLoader::CreateCube()
 
 }
 
-vector<MyMesh> ModuleModelLoader::Load(const char* path)
+void ModuleModelLoader::Load(const char* path)
 {
-
-	vector<MyMesh> ret;
-	char* buff;
-	uint size = 1000;
-
-	if (size == 0)
-	{
-		LOG("Error loading %s", path);
-		return ret;
-	}
-
-	const aiScene* scene = aiImportFileFromMemory(buff, size, aiProcessPreset_TargetRealtime_MaxQuality, NULL);
-
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		for (int i = 0; i < scene->mNumMeshes; i++)
+		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-			aiMesh* mesh_to_load = scene->mMeshes[i];
-			MyMesh mesh;
+			MyMesh m;
+			//Vertices
+			m.num_vertices = scene->mMeshes[0]->mNumVertices;
+			m.vertices = new float[m.num_vertices * 3];
+			memcpy(m.vertices, scene->mMeshes[0]->mVertices, sizeof(float) * m.num_vertices * 3);
+			LOG("New mesh with %d vertices", m.num_vertices);
+			aiReleaseImport(scene);
 
-			//Vertices ------------------------------------------------------------------------------------------------------
-			mesh.num_vertices = mesh_to_load->mNumVertices;
-			mesh.vertices = new float[mesh.num_vertices * 3];
-			memcpy(mesh.vertices, mesh_to_load->mVertices, sizeof(float)*mesh.num_vertices * 3);
-			LOG("Mesh Loaded with %d vertices", mesh.num_vertices);
-
-			//Load buffer to VRAM
-			glGenBuffers(1, (GLuint*)&(mesh.id_vertices));
-			glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertices);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh.num_vertices, mesh.vertices, GL_STATIC_DRAW);
-
-			//Indices --------------------------------------------------------------------------------------------------------
-			if (mesh_to_load->HasFaces())
+			if (scene->mMeshes[0]->HasFaces())
 			{
-				mesh.num_indices = mesh_to_load->mNumFaces * 3;
-				mesh.indices = new uint[mesh.num_indices];
-				for (uint f = 0; f < mesh_to_load->mNumFaces; f++)
+				m.num_indices = scene->mMeshes[0]->mNumFaces * 3;
+				m.indices = new uint[m.num_indices]; // assume each face is a triangle
+				for (uint i = 0; i < scene->mMeshes[0]->mNumFaces; ++i)
 				{
-					if (mesh_to_load->mFaces[f].mNumIndices != 3)
+					if (scene->mMeshes[0]->mFaces[i].mNumIndices != 3)
 					{
-						LOG("WARNING: geometry with face != 3 indices is trying to be loaded");
+						LOG("WARNING, geometry face with != 3 indices!");
 					}
+
 					else
 					{
-						memcpy(&mesh.indices[f * 3], mesh_to_load->mFaces[f].mIndices, 3 * sizeof(uint));
+						memcpy(&m.indices[i * 3], scene->mMeshes[0]->mFaces[i].mIndices, 3 * sizeof(uint));
 					}
+
 				}
 			}
 
-			//Load indices buffer to VRAM
-			glGenBuffers(1, (GLuint*)&(mesh.id_indices));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_indices);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh.num_indices, mesh.indices, GL_STATIC_DRAW);
-
-			//Load UVs -----------------------------------------------------------------------------------------------------------------------
-			if (mesh_to_load->HasTextureCoords(0))
-			{
-				mesh.num_uvs = mesh_to_load->mNumVertices; //Same size as vertices
-				mesh.uvs = new float[mesh.num_uvs * 2];
-				for (int uvs_item = 0; uvs_item < mesh.num_uvs; uvs_item++)
-				{
-					memcpy(&mesh.uvs[uvs_item * 2], &mesh_to_load->mTextureCoords[0][uvs_item].x, sizeof(float));
-					memcpy(&mesh.uvs[(uvs_item * 2) + 1], &mesh_to_load->mTextureCoords[0][uvs_item].y, sizeof(float));
-				}
-
-				glGenBuffers(1, (GLuint*)&(mesh.id_uvs));
-				glBindBuffer(GL_ARRAY_BUFFER, mesh.id_uvs);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * mesh.num_uvs, mesh.uvs, GL_STATIC_DRAW);
-			}
-
-			//Load Textures --------------------------------------------------------------------------------------------------------------------
-			/*const aiMaterial* material = scene->mMaterials[i];
-
-			if (material != nullptr)
-			{
-			aiString texture_path;
-			if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texture_path) == AI_SUCCESS) //For now only first diffuse texture
-			{
-			char* texture_buffer;
-			if (App->file_system->Load(texture_path.data, &texture_buffer) != 0)
-			{
-			LOG("Texture load correctly");
-			}
-			}
-			else
-			{
-			LOG("Error when loading texture of mesh %s", mesh_to_load->mName.data);
-			}
-			}*/
-
-
-			ret.push_back(mesh);
+			uint my_id = 0;
+			glGenBuffers(1, (GLuint*) &(my_id));
+			glBindBuffer(GL_ARRAY_BUFFER, my_id);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.num_vertices * 3, m.vertices, GL_STATIC_DRAW);
 		}
-		aiReleaseImport(scene);
 	}
 	else
-	{
-		LOG("Error loading scene %s. ERROR: %s", path, aiGetErrorString());
-	}
-
-	delete[] buff;
-
-	return ret;
+		LOG("Error loading scene %s", path);
 }
 
 uint ModuleModelLoader::LoadTexture(const char* path)
