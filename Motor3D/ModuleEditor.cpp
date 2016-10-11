@@ -143,13 +143,27 @@ void ModuleEditor::AttributeEditor()
 
 	else
 	{
+		// Change the name
+		char* new_name = new char[20];
+		strcpy(new_name, SelectedObject->name.data());
+		ImGui::InputText("Name", new_name, 20);
+		SelectedObject->name = new_name;
+
+		//Transformation
 		if (ImGui::CollapsingHeader("Transformation"));
 		{
+			float3 new_position;
+			float3 new_scale;
 			ImGui::Text("Position");
-			ImGui::DragFloat("X",0); ImGui::SameLine(); ImGui::DragFloat("Y", 0); ImGui::SameLine(); ImGui::DragFloat("Z", 0);
+			ImGui::DragFloat("X",&new_position.x); ImGui::SameLine(); ImGui::DragFloat("Y", &new_position.y); ImGui::SameLine(); ImGui::DragFloat("Z", &new_position.z);
 			ImGui::Text("Scale");
-			ImGui::DragFloat("X",0); ImGui::SameLine(); ImGui::DragFloat("Y", 0); ImGui::SameLine(); ImGui::DragFloat("Z", 0);
+			ImGui::DragFloat("X", &new_scale.x); ImGui::SameLine(); ImGui::DragFloat("Y", &new_scale.x); ImGui::SameLine(); ImGui::DragFloat("Z", &new_scale.x);
 			ImGui::Text("Rotation");
+		}
+
+		if (ImGui::CollapsingHeader("Material"));
+		{
+
 		}
 	}
 
@@ -214,9 +228,20 @@ void ModuleEditor::CreateHierarchy()
 
 	else
 	{
-		if (ImGui::TreeNode(App->gameobject_manager->root->name.c_str()))
+		if (ImGui::TreeNode(App->gameobject_manager->root->name.data()))
 		{
-			ShowChilds(App->gameobject_manager->root);
+			if (App->gameobject_manager->root == SelectedObject)
+			{
+				ImGuiTreeNodeFlags_Framed;
+			}
+
+			if (ImGui::IsItemClicked())
+			{
+				SelectedObject = (App->gameobject_manager->root);
+			}
+
+			else
+				ShowChilds(App->gameobject_manager->root);
 
 			ImGui::TreePop();
 		}
