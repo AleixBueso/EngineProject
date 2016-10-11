@@ -1,4 +1,6 @@
 #include "Component.h"
+#include "Globals.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 #include "GameObject.h"
 
 Component::Component()

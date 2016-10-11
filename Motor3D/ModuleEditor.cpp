@@ -5,6 +5,7 @@
 #include "Glew\include\glew.h"
 #include "GameObject Manager.h"
 #include "glut\glut.h"
+#include "ComponentTransform.h"
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {};
@@ -122,23 +123,75 @@ update_status ModuleEditor::Update(float dt)
 		CreateHierarchy();
 	}
 
+	AttributeEditor();
+
 
 	return UPDATE_CONTINUE;
 };
 
-void ModuleEditor::CreateMenu()
+void ModuleEditor::AttributeEditor()
 {
 
+	ImGuiTreeNodeFlags attribute_editor_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+	ImGui::Begin("Attribute Editor", 0, attribute_editor_flags);
+
+	ImGui::SetWindowSize(ImVec2(390, 600));
+	ImGui::SetWindowPos(ImVec2(1000, 25));
+
+	if (SelectedObject == NULL)
+		ImGui::Text("No GameObject Selected.");
+
+	else
+	{
+		if (ImGui::CollapsingHeader("Transformation"));
+		{
+			ImGui::Text("Position");
+			ImGui::DragFloat("X",0); ImGui::SameLine(); ImGui::DragFloat("Y", 0); ImGui::SameLine(); ImGui::DragFloat("Z", 0);
+			ImGui::Text("Scale");
+			ImGui::DragFloat("X",0); ImGui::SameLine(); ImGui::DragFloat("Y", 0); ImGui::SameLine(); ImGui::DragFloat("Z", 0);
+			ImGui::Text("Rotation");
+		}
+	}
+
+	ImGui::End();
 }
 
 void ModuleEditor::ShowChilds(GameObject* parent)
 {
 	if (parent->childs.empty() == false)
 	{
-		for (uint i = 0; i < parent->childs.size(); i++)
+		list<GameObject*>::const_iterator it = parent->childs.begin();
+		while (it != parent->childs.end())
 		{
-			ImGui::Text(parent->childs[i]->name.c_str());
-			ShowChilds(parent->childs[i]);
+			if ((*it) == SelectedObject)
+			{
+				ImGuiTreeNodeFlags_Framed;
+			}
+
+			if ((*it)->childs.size() > 0)
+			{
+				if (ImGui::TreeNodeEx((*it)->name.data(), ImGuiTreeNodeFlags_Framed))
+				{
+					if (ImGui::IsItemClicked())
+					{
+						SelectedObject = (*it);
+					}
+					ShowChilds(*it);
+					ImGui::TreePop();
+				}
+			}
+			else
+			{
+				if (ImGui::TreeNodeEx((*it)->name.data(), ImGuiTreeNodeFlags_Leaf))
+				{
+					if (ImGui::IsItemClicked())
+					{
+						SelectedObject = (*it);
+					}
+					ImGui::TreePop();
+				}
+			}
+			++it;
 		}
 	}
 		

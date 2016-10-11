@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "Module.h"
 #include <stdlib.h>
+#include <list>
 #include <vector>
 
 
@@ -35,9 +36,13 @@ public:
 
 public:
 	
+	Component* transform;
+	Component* material;
+	Component* mesh;
+
 	vector<Component*> components;
 	GameObject* parent;
-	vector<GameObject*> childs;
+	list<GameObject*> childs;
 	
 	string name;
 };

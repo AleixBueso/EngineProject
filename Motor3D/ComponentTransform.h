@@ -1,5 +1,5 @@
-#ifndef TRANSFORM
-#define TRANSFORM
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 
 
 #include "Globals.h"
@@ -18,10 +18,10 @@ public:
 
 public:
 	 
-	float3 Position;
-	float3 Scale;
-	Quat Rotation;
+	float3 position;
+	float3 scale;
+	Quat rotation;
 	 
 };
 
-#endif // !TRANSFORM
+#endif // !TRANSFORM_H

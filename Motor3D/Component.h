@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 
+
 class GameObject;
 
 enum component_type

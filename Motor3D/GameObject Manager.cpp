@@ -35,9 +35,10 @@ void GameObjectManager::Delete(GameObject* GO_to_delete)
 		tmp = tmp->parent;
 
 		//erase childs
-		for (uint i = 0; i < tmp->childs.size(); i++)
+		list<GameObject*>::const_iterator it = GO_to_delete->childs.begin();
+		while (it != GO_to_delete->childs.end())
 		{
-			delete tmp->childs[i];
+			delete *it;
 		}
 
 		tmp->childs.clear();

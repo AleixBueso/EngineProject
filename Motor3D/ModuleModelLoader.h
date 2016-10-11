@@ -20,6 +20,11 @@ struct MyMesh
 	uint num_normals = 0;
 	float* normals = nullptr;
 
+	//UVs
+	uint id_UVs = 0;
+	uint num_UVs = 0;
+	math::float2* UVs = nullptr;
+
 	//Texture
 	uint id_texture = 0;
 };

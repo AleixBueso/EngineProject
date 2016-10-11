@@ -13,7 +13,7 @@ public:
 
 	update_status Update(float dt);
 
-	void CreateMenu();
+	void AttributeEditor();
 
 	void ShowChilds(GameObject* parent);
 	void CreateHierarchy();

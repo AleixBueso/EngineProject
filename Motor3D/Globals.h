@@ -23,8 +23,8 @@ enum update_status
 };
 
 // Configuration -----------
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 640
+#define SCREEN_WIDTH 1400
+#define SCREEN_HEIGHT 900
 #define CENTER_SCREEN_X 400
 #define CENTER_SCREEN_Y 320
 #define SCREEN_SIZE 1

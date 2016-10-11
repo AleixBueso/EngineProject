@@ -3,8 +3,11 @@
 
 GameObject::GameObject() : name("Empty GameObject")
 {
-
+	CreateComponent(COMPONENT_TRANSFORM, 0);
+	CreateComponent(COMPONENT_MATERIAL, 1);
+	CreateComponent(COMPONENT_MESH, 2);
 }
+
 GameObject::GameObject(GameObject* Parent, string _name) : parent(Parent), name(_name)
 {
 	
@@ -22,12 +25,27 @@ void GameObject::Update()
 
 void GameObject::AddComponent(Component* component)
 {
+	if (component->type == COMPONENT_TRANSFORM)
+		transform = component;
+	if (component->type == COMPONENT_MATERIAL)
+		material = component;
+	if (component->type == COMPONENT_MESH)
+		mesh = component;
+
 	components.push_back(component);
 }
 
 Component* GameObject::CreateComponent(component_type type, uint id_num)
 {
 	Component* new_component = new Component(type, id_num);
+
+	if (new_component->type == COMPONENT_TRANSFORM)
+		transform = new_component;
+	if (new_component->type == COMPONENT_MATERIAL)
+		material = new_component;
+	if (new_component->type == COMPONENT_MESH)
+		mesh = new_component;
+
 	components.push_back(new_component);
 	return new_component;
 }
@@ -74,9 +92,11 @@ void GameObject::AddChild(GameObject* child)
 
 void GameObject::RemoveChild(GameObject* child)
 {
-	for (uint i = 0; i < childs.size(); i++)
+	list<GameObject*>::const_iterator it = childs.begin();
+	while (it != childs.end())
 	{
-		if (childs[i] == child)
-			childs.erase(childs.begin() + i);
-	} 
+		if (*it == child)
+			childs.erase(it);
+		it++;
+	}
 }

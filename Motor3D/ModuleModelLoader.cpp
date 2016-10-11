@@ -43,31 +43,6 @@ bool ModuleModelLoader::Start()
 	LOG("Loading ModelLoader");
 	bool ret = true;
 
-	//ilLoadImage("Images\Lenna.png");
-	//GLubyte LeenaImage;
-
-	/*{
-		GLubyte checkImage[120][120][4];
-		for (int i = 0; i < 120; i++) {
-			for (int j = 0; j < 120; j++) {
-				int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-				checkImage[i][j][0] = (GLubyte)c;
-				checkImage[i][j][1] = (GLubyte)c;
-				checkImage[i][j][2] = (GLubyte)c;
-				checkImage[i][j][3] = (GLubyte)255;
-			}
-
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glGenTextures(1, &ImageName);
-			glBindTexture(GL_TEXTURE_2D, ImageName);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 120, 120, 0, GL_RGBA, GL_UNSIGNED_BYTE, "Images\Lenna.png");
-		}
-	}*/
-
 	return ret;
 };
 
@@ -89,7 +64,7 @@ bool ModuleModelLoader::CleanUp()
 update_status ModuleModelLoader::Update(float dt)
 {
 	for (uint i = 0; i < Meshes.size(); i++)
-		App->renderer3D->DrawMesh(Meshes[i]);
+		App->renderer3D->DrawMesh(*Meshes[i]);
 
 
 	if (texture_enabled)
@@ -131,51 +106,61 @@ bool ModuleModelLoader::Load(const char* path)
 			memcpy(mesh->vertices, scene->mMeshes[i]->mVertices, sizeof(float) * mesh->num_vertices);
 			LOG("New mesh with %d vertices", mesh->num_vertices);
 
+			glGenBuffers(1, (GLuint*)&(mesh->id_vertices));
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+
 			// Copying normals
 			mesh->num_normals = scene->mMeshes[i]->mNumVertices;
 			mesh->normals = new float[mesh->num_normals];
 			memcpy(mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * mesh->num_normals);
 			LOG("New mesh with %d normals", mesh->num_normals);
 
-			/*// Copying texture coords
-			uint UV_index = 0;
-			if (scene->mMeshes[i]->HasTextureCoords(UV_index))
-			{
-				mesh->num_tex_coord = scene->mMeshes[i]->mNumVertices;
-				mesh->tex_coord = new float2[mesh->num_tex_coord];
-				for (int k = 0; k < mesh->num_tex_coord; ++k)
-				{
-					mesh->tex_coord[k].x = ai_mesh->mTextureCoords[UV_index][k].x;
-					mesh->tex_coord[k].y = ai_mesh->mTextureCoords[UV_index][k].y;
-				}
-				LOG("New mesh with %d texture coords", mesh->num_tex_coord);
-			}*/
+			glGenBuffers(1, (GLuint*)&(mesh->id_normals));
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float)* mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
 
-
-			// Copying indicies (faces on Assimp)
+			// Copiying Indices
 			if (scene->mMeshes[i]->HasFaces())
 			{
 				mesh->num_indices = scene->mMeshes[i]->mNumFaces * 3;
-				mesh->indices = new uint[mesh->num_indices]; //Each face is a triangle
-				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+				mesh->indices = new uint[mesh->num_indices];
+				for (unsigned int j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
-						LOG("[warning], geometry face without 3 indices!");
+						LOG("WARNING, Geometry with more/less than 3 faces wants to be loaded");
 					}
 					else
 					{
-						memcpy(&mesh->indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+						memcpy(&mesh->indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
 			}
+			glGenBuffers(1, (GLuint*)&(mesh->id_indices));
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
 
-			App->renderer3D->LoadMeshBuffer(mesh);
-			LOG("[end] New mesh ------------------------------------------------------");
+			//Copy UVs----------------------------------------------------------------------------------------
+			uint uv_id = 0;
+			if (scene->mMeshes[i]->HasTextureCoords(uv_id))
+			{
+				mesh->num_UVs = scene->mMeshes[i]->mNumVertices;
+				mesh->UVs = new float2[mesh->num_UVs];
+				for (int k = 0; k < mesh->num_UVs; k++)
+				{
+					memcpy(&mesh->UVs[k], &scene->mMeshes[i]->mTextureCoords[uv_id][k].x, sizeof(float2));
+					memcpy(&mesh->UVs[k + 1], &scene->mMeshes[i]->mTextureCoords[uv_id][k + 1].y, sizeof(float2));
+				}
+				glGenBuffers(1, (GLuint*)&(mesh->id_UVs));
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_UVs);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * mesh->num_UVs, mesh->UVs, GL_STATIC_DRAW);
+			}
 
 			Meshes.push_back(mesh);
 		}
 	}
+
 	else
 	{
 		ret = false;
