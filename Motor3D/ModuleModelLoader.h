@@ -15,11 +15,6 @@ struct MyMesh
 	uint num_indices = 0;
 	uint* indices = nullptr;
 
-	//UVs
-	uint id_uvs = 0;
-	uint num_uvs = 0;
-	float* uvs = nullptr;
-
 	//Normals
 	uint id_normals = 0;
 	uint num_normals = 0;

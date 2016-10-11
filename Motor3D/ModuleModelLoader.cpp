@@ -117,8 +117,7 @@ bool ModuleModelLoader::Load(const char* path)
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		//for (uint i = 0; i < scene->mNumMeshes; i++)
-		uint i = 0;
+		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 			LOG("[start] New mesh ----------------------------------------------------");
 			MyMesh* mesh = new MyMesh();
@@ -132,8 +131,8 @@ bool ModuleModelLoader::Load(const char* path)
 			// Copying normals
 			mesh->num_normals = scene->mMeshes[i]->mNumVertices;
 			mesh->normals = new float[mesh->num_normals];
-			memcpy(mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * mesh->num_vertices);
-			LOG("New mesh with %d normals", mesh->num_vertices);
+			memcpy(mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * mesh->num_normals);
+			LOG("New mesh with %d normals", mesh->num_normals);
 
 			/*// Copying texture coords
 			uint UV_index = 0;
@@ -172,8 +171,6 @@ bool ModuleModelLoader::Load(const char* path)
 			LOG("[end] New mesh ------------------------------------------------------");
 
 			Meshes.push_back(mesh);
-			return ret;
-			
 		}
 	}
 	else
@@ -235,7 +232,7 @@ bool ModuleRenderer3D::LoadMeshBuffer(const MyMesh* mesh)
 	else
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*mesh->num_indices, &mesh->indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, &mesh->indices, GL_STATIC_DRAW);
 	}
 
 	/*// Texture coords
@@ -256,7 +253,7 @@ bool ModuleRenderer3D::LoadMeshBuffer(const MyMesh* mesh)
 
 void ModuleModelLoader::CreateCube()
 {
-	uint my_id = 1;
+	uint my_id = 5;
 
 	glLineWidth(2.0f);
 	glBegin(GL_TRIANGLES);
@@ -355,5 +352,6 @@ void ModuleModelLoader::CreateCube()
 	
 	glBindBuffer(GL_VERTEX_ARRAY, my_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glLineWidth(1.0f);
 
 }
