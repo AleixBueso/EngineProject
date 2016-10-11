@@ -75,6 +75,9 @@ bool ModuleModelLoader::CleanUp()
 {
 	LOG("Unloading ModelLoader");
 
+	for (uint i = 0; i < Meshes.size(); i++)
+		delete Meshes[i];
+
 	Meshes.clear();
 
 	aiDetachAllLogStreams();
