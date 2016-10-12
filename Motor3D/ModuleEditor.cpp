@@ -24,6 +24,7 @@ bool ModuleEditor::Start()
 	App->camera->LookAt(vec(0, 0, 0));
 
 	ShowTestWindow = false;
+	SelectedObject = App->gameobject_manager->root;
 
 	return ret;
 };
@@ -150,24 +151,33 @@ void ModuleEditor::AttributeEditor()
 		if (ImGui::CollapsingHeader("Transformation"));
 		{
 			if (SelectedObject->transform != NULL)
-				SelectedObject->transform->EditorTransformation();
+				SelectedObject->transform->ComponentEditor();
+
+			else
+				ImGui::Text("No transformation component.");
 		}
 
+		// Material
 		if (ImGui::CollapsingHeader("Material"));
 		{
+			if (SelectedObject->material != NULL)
+				SelectedObject->material->ComponentEditor();
 
+			else
+				ImGui::Text("No material component.");
 		}
 
+		//Mesh
 		if (ImGui::CollapsingHeader("Mesh"));
 		{
 			if (SelectedObject->mesh != nullptr)
 			{
-				ImGui::Text("NumVertices: %f", SelectedObject->mesh);
-				ImGui::Text("NumNormals: %f", SelectedObject->mesh);
-				ImGui::Text("NumUVs: %f", SelectedObject->mesh);
+				if (SelectedObject->mesh != NULL)
+					SelectedObject->mesh->ComponentEditor();
+				
+				else
+					ImGui::Text("No mesh component.");
 			}
-			else
-				ImGui::Text("No mesh component.");
 		}
 	}
 
@@ -228,7 +238,7 @@ void ModuleEditor::CreateHierarchy()
 	ImGui::Text("Tree: ----------------------------");
 
 	if (App->gameobject_manager->root == NULL)
-		ImGui::Text("No GameObjects on the Scene :-(");
+		ImGui::Text("No GameObjects on the Scene.");
 
 	else
 	{

@@ -26,7 +26,9 @@ struct MyMesh
 	math::float2* UVs = nullptr;
 
 	//Texture
-	uint id_texture = 0;
+	uint id_texture_coords = 0;
+	uint num_texture_coords = 0;
+	float* texture_coords = nullptr;
 };
 
 class ModuleModelLoader : public Module
@@ -45,6 +47,8 @@ public:
 	bool LoadModel(const char* full_path);
 
 	bool Load(const char* path);
+
+	//void LoadMesh(const aiMesh* mesh, const aiScene* scene);
 
 	uint LoadTexture(const char* path);
 

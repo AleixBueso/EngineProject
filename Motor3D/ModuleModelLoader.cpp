@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleModelLoader.h"
 #include "ComponentMaterial.h"
+#include "ComponentMesh.h"
+#include "ComponentTransform.h"
 
 #include "Glew\include\glew.h"
 #include "glut\glut.h"
@@ -67,17 +69,10 @@ update_status ModuleModelLoader::Update(float dt)
 	for (uint i = 0; i < Meshes.size(); i++)
 		App->renderer3D->DrawMesh(*Meshes[i]);
 
-
 	if (texture_enabled)
 		glEnable(GL_TEXTURE_2D);
 	else
 		glDisable(GL_TEXTURE_2D);
-
-
-	//CreateCube();
-	//glBindTexture(GL_TEXTURE_2D, ImageName);
-
-
 
 	return UPDATE_CONTINUE;
 };
@@ -91,6 +86,9 @@ bool ModuleModelLoader::LoadModel(const char* full_path)
 
 bool ModuleModelLoader::Load(const char* path)
 {
+	GameObject* new_object = App->gameobject_manager->CreateGameObject();
+	new_object->name = "Loaded fbx";
+
 	bool ret = true;
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -98,13 +96,15 @@ bool ModuleModelLoader::Load(const char* path)
 	{
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
+			ComponentMesh* comp_mesh = (ComponentMesh*)new_object->CreateComponent(component_type::COMPONENT_MESH, 0);
+
 			LOG("[start] New mesh ----------------------------------------------------");
 			MyMesh* mesh = new MyMesh();
 
 			glGenBuffers(1, (GLuint*)&(mesh->id_vertices));
 			glGenBuffers(1, (GLuint*)&(mesh->id_indices));
 			glGenBuffers(1, (GLuint*)&(mesh->id_normals));
-
+			glGenBuffers(1, (GLuint*)&(mesh->id_UVs));
 
 
 			// Copying vertices
@@ -139,21 +139,36 @@ bool ModuleModelLoader::Load(const char* path)
 			memcpy(mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * mesh->num_normals);
 			LOG("New mesh with %d normals", mesh->num_normals);
 
+			uint uv_id = 0;
+			if (scene->mMeshes[i]->HasTextureCoords(uv_id))
+			{
+				mesh->num_UVs = scene->mMeshes[i]->mNumVertices;
+				mesh->UVs = new float2[mesh->num_UVs];
+				for (int k = 0; k < mesh->num_UVs; k++)
+				{
+					memcpy(&mesh->UVs[k], &scene->mMeshes[i]->mTextureCoords[uv_id][k].x, sizeof(float2));
+					memcpy(&mesh->UVs[k + 1], &scene->mMeshes[i]->mTextureCoords[uv_id][k + 1].y, sizeof(float2));
+				}
 
 
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
 
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
 
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_UVs);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * mesh->num_UVs, mesh->UVs, GL_STATIC_DRAW);
+	
+			}
 
 			Meshes.push_back(mesh);
 		}
 	}
+
 	else
 	{
 		ret = false;
@@ -173,6 +188,87 @@ uint ModuleModelLoader::LoadTexture(const char* path)
 	return ilutGLBindTexImage();
 
 }
+
+/*void ModuleModelLoader::LoadMesh(const aiMesh* mesh, const aiScene* scene)
+{
+	MyMesh* new_mesh = new MyMesh();
+
+	//vertices
+	glGenBuffers(1, (GLuint*)&(new_mesh->id_vertices));
+
+	new_mesh->num_vertices = mesh->mNumVertices;
+	new_mesh->vertices = new float[new_mesh->num_vertices * 3];
+	memcpy(new_mesh->vertices, mesh->mVertices, sizeof(float) * new_mesh->num_vertices * 3);
+	LOG("New mesh with %d vertices", new_mesh->num_vertices);
+
+	glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_vertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_vertices * 3, new_mesh->vertices, GL_STATIC_DRAW);
+
+
+
+	//indices
+	if (mesh->HasFaces())
+	{
+		glGenBuffers(1, (GLuint*)&(new_mesh->id_indices));
+
+
+		new_mesh->num_indices = mesh->mNumFaces * 3;
+		new_mesh->indices = new uint[new_mesh->num_indices]; // assume each face is a triangle
+		for (uint i = 0; i < mesh->mNumFaces; ++i)
+		{
+			if (mesh->mFaces[i].mNumIndices != 3)
+			{
+				LOG("WARNING, geometry face with != 3 indices!");
+
+			}
+
+			else
+				memcpy(&new_mesh->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_indices);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_indices, new_mesh->indices, GL_STATIC_DRAW);
+
+	}
+
+
+	//normals
+
+	if (mesh->HasNormals())
+	{
+		glGenBuffers(1, (GLuint*)&(new_mesh->id_normals));
+
+		new_mesh->num_normals = new_mesh->num_vertices;
+		new_mesh->normals = new float[new_mesh->num_normals * 3];
+		memcpy(new_mesh->normals, mesh->mNormals, sizeof(float) * new_mesh->num_normals * 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_normals * 3, new_mesh->normals, GL_STATIC_DRAW);
+	}
+
+	if (mesh->HasTextureCoords(0))
+	{
+		glGenBuffers(1, (GLuint*)&(new_mesh->id_texture_coords));
+
+		new_mesh->num_texture_coords = new_mesh->num_vertices;
+		new_mesh->texture_coords = new float[new_mesh->num_texture_coords * 2];
+
+		aiVector3D* vector = mesh->mTextureCoords[0];
+
+		for (uint i = 0; i < new_mesh->num_texture_coords * 2; i += 2)
+		{
+			new_mesh->texture_coords[i] = vector->x;
+			new_mesh->texture_coords[i + 1] = vector->y;
+			vector++;
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_texture_coords);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_texture_coords * 2, new_mesh->texture_coords, GL_STATIC_DRAW);
+	}
+
+	Meshes.push_back(new_mesh);
+
+}*/
 
 bool ModuleRenderer3D::LoadMeshBuffer(const MyMesh* mesh)
 {

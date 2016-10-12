@@ -10,6 +10,7 @@ struct MyMesh;
 class ComponentMesh : public Component
 {
 public:
+	ComponentMesh(GameObject* game_object);
 	ComponentMesh(component_type type, GameObject* game_object);
 	~ComponentMesh();
 

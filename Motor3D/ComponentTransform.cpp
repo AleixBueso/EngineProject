@@ -83,7 +83,7 @@ void ComponentTransform::SetTransformation()
 	transformation = transformation.FromTRS(position, rotation, scale);
 }
 
-void ComponentTransform::EditorTransformation()
+void ComponentTransform::ComponentEditor()
 {
 	ImGui::Text("Position");
 	ImGui::DragFloat("X", &position.x); ImGui::SameLine(); ImGui::DragFloat("Y", &position.y); ImGui::SameLine(); ImGui::DragFloat("Z", &position.z);

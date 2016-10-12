@@ -12,6 +12,8 @@ GameObject::GameObject() : name("Empty GameObject")
 GameObject::GameObject(GameObject* Parent, string Name) : parent(Parent), name(Name)
 {
 	transform = CreateComponent(component_type::COMPONENT_TRANSFORM, 0);
+	//material = CreateComponent(component_type::COMPONENT_MATERIAL, 0);
+	mesh = CreateComponent(component_type::COMPONENT_MESH, 0);
 }
 
 GameObject::~GameObject()
@@ -49,7 +51,6 @@ Component* GameObject::CreateComponent(component_type type, uint id_num)
 		transform = new ComponentTransform(type, this);
 		components.push_back(transform);
 		return transform;
-
 	}
 
 	if (type == COMPONENT_MATERIAL)

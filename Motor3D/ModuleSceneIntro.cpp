@@ -28,7 +28,7 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->model_loader->Load("Models/Test_2.fbx");
+	App->model_loader->Load("Models/Tank.fbx");
 
 	//lenna_id = App->model_loader->LoadTexture("lenna.png");
 

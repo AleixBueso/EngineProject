@@ -28,7 +28,7 @@ public:
 	float4x4 GetTransformationMatrix();
 
 	void SetTransformation();
-	void EditorTransformation();
+	void ComponentEditor();
 
 	void Update(uint dt);
 

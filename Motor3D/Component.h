@@ -24,7 +24,7 @@ public:
 	virtual void Enable();
 	virtual void Update(float dt);
 	virtual void Disable();
-	virtual void EditorTransformation() {};
+	virtual void ComponentEditor() {};
 
 public:
 
