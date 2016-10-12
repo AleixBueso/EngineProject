@@ -16,10 +16,10 @@ class GameObject
 public:
 
 	GameObject();
-	GameObject(GameObject* Parent = NULL, string _name = "Empty GameObject");
+	GameObject(GameObject* Parent = NULL, string Name = "Empty GameObject");
 	~GameObject();
 
-	void Update();
+	void Update(float dt);
 
 	void AddComponent(Component* component);
 	Component* CreateComponent(component_type type, uint id_num);
@@ -36,9 +36,9 @@ public:
 
 public:
 	
-	Component* transform;
-	Component* material;
-	Component* mesh;
+	Component* transform = nullptr;
+	Component* material = nullptr;
+	Component* mesh = nullptr;
 
 	vector<Component*> components;
 	GameObject* parent;

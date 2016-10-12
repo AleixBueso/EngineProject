@@ -57,11 +57,8 @@ update_status ModuleEditor::Update(float dt)
 		//View
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Test Window"))
-				ShowTestWindow = !ShowTestWindow;
-
-			if (ImGui::MenuItem("Show Textures"))
-				App->model_loader->texture_enabled = !App->model_loader->texture_enabled;
+			if (ImGui::Checkbox("Test Window", &ShowTestWindow));
+			if (ImGui::Checkbox("Textures", &App->model_loader->texture_enabled));
 
 			ImGui::EndMenu();
 		}
@@ -152,18 +149,25 @@ void ModuleEditor::AttributeEditor()
 		//Transformation
 		if (ImGui::CollapsingHeader("Transformation"));
 		{
-			float3 new_position;
-			float3 new_scale;
-			ImGui::Text("Position");
-			ImGui::DragFloat("X",&new_position.x); ImGui::SameLine(); ImGui::DragFloat("Y", &new_position.y); ImGui::SameLine(); ImGui::DragFloat("Z", &new_position.z);
-			ImGui::Text("Scale");
-			ImGui::DragFloat("X", &new_scale.x); ImGui::SameLine(); ImGui::DragFloat("Y", &new_scale.x); ImGui::SameLine(); ImGui::DragFloat("Z", &new_scale.x);
-			ImGui::Text("Rotation");
+			if (SelectedObject->transform != NULL)
+				SelectedObject->transform->EditorTransformation();
 		}
 
 		if (ImGui::CollapsingHeader("Material"));
 		{
 
+		}
+
+		if (ImGui::CollapsingHeader("Mesh"));
+		{
+			if (SelectedObject->mesh != nullptr)
+			{
+				ImGui::Text("NumVertices: %f", SelectedObject->mesh);
+				ImGui::Text("NumNormals: %f", SelectedObject->mesh);
+				ImGui::Text("NumUVs: %f", SelectedObject->mesh);
+			}
+			else
+				ImGui::Text("No mesh component.");
 		}
 	}
 
@@ -228,7 +232,7 @@ void ModuleEditor::CreateHierarchy()
 
 	else
 	{
-		if (ImGui::TreeNode(App->gameobject_manager->root->name.data()))
+		if (ImGui::TreeNodeEx(App->gameobject_manager->root->name.data(), ImGuiTreeNodeFlags_Framed))
 		{
 			if (App->gameobject_manager->root == SelectedObject)
 			{

@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 
 	//lenna_id = App->model_loader->LoadTexture("lenna.png");
 
-	App->gameobject_manager->CreateGameObject()->AddChild(App->gameobject_manager->CreateGameObject());
+	//App->gameobject_manager->CreateGameObject();
 	
 
 	return ret;

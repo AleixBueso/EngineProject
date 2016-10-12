@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleModelLoader.h"
+#include "ComponentMaterial.h"
 
 #include "Glew\include\glew.h"
 #include "glut\glut.h"
@@ -100,15 +101,37 @@ bool ModuleModelLoader::Load(const char* path)
 			LOG("[start] New mesh ----------------------------------------------------");
 			MyMesh* mesh = new MyMesh();
 
+			glGenBuffers(1, (GLuint*)&(mesh->id_vertices));
+			glGenBuffers(1, (GLuint*)&(mesh->id_indices));
+			glGenBuffers(1, (GLuint*)&(mesh->id_normals));
+
+
+
 			// Copying vertices
 			mesh->num_vertices = scene->mMeshes[i]->mNumVertices;
 			mesh->vertices = new float[mesh->num_vertices];
 			memcpy(mesh->vertices, scene->mMeshes[i]->mVertices, sizeof(float) * mesh->num_vertices);
 			LOG("New mesh with %d vertices", mesh->num_vertices);
 
-			glGenBuffers(1, (GLuint*)&(mesh->id_vertices));
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+
+			// Copying indicies (faces on Assimp)
+			if (scene->mMeshes[i]->HasFaces())
+			{
+				mesh->num_indices = scene->mMeshes[i]->mNumFaces * 3;
+				mesh->indices = new uint[mesh->num_indices]; //Each face is a triangle
+				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+				{
+					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
+					{
+						LOG("[warning], geometry face without 3 indices!");
+					}
+					else
+					{
+						memcpy(&mesh->indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+					}
+				}
+			}
+
 
 			// Copying normals
 			mesh->num_normals = scene->mMeshes[i]->mNumVertices;
@@ -116,56 +139,27 @@ bool ModuleModelLoader::Load(const char* path)
 			memcpy(mesh->normals, scene->mMeshes[i]->mNormals, sizeof(float) * mesh->num_normals);
 			LOG("New mesh with %d normals", mesh->num_normals);
 
-			glGenBuffers(1, (GLuint*)&(mesh->id_normals));
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float)* mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
 
-			// Copiying Indices
-			if (scene->mMeshes[i]->HasFaces())
-			{
-				mesh->num_indices = scene->mMeshes[i]->mNumFaces * 3;
-				mesh->indices = new uint[mesh->num_indices];
-				for (unsigned int j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
-				{
-					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
-					{
-						LOG("WARNING, Geometry with more/less than 3 faces wants to be loaded");
-					}
-					else
-					{
-						memcpy(&mesh->indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
-					}
-				}
-			}
-			glGenBuffers(1, (GLuint*)&(mesh->id_indices));
+
+
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
 
-			//Copy UVs----------------------------------------------------------------------------------------
-			uint uv_id = 0;
-			if (scene->mMeshes[i]->HasTextureCoords(uv_id))
-			{
-				mesh->num_UVs = scene->mMeshes[i]->mNumVertices;
-				mesh->UVs = new float2[mesh->num_UVs];
-				for (int k = 0; k < mesh->num_UVs; k++)
-				{
-					memcpy(&mesh->UVs[k], &scene->mMeshes[i]->mTextureCoords[uv_id][k].x, sizeof(float2));
-					memcpy(&mesh->UVs[k + 1], &scene->mMeshes[i]->mTextureCoords[uv_id][k + 1].y, sizeof(float2));
-				}
-				glGenBuffers(1, (GLuint*)&(mesh->id_UVs));
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_UVs);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * mesh->num_UVs, mesh->UVs, GL_STATIC_DRAW);
-			}
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
+
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
 
 			Meshes.push_back(mesh);
 		}
 	}
-
 	else
 	{
 		ret = false;
 		LOG("Error loading scene %s", path);
 	}
+
 	return ret;
 }
 

@@ -1,6 +1,8 @@
 #include "ComponentTransform.h"
+#include "GameObject.h"
+#include "Imgui\imgui.h"
 
-ComponentTransform::ComponentTransform(component_type type, GameObject* game_object) : Component(type, game_object)
+ComponentTransform::ComponentTransform(component_type type, GameObject* game_object) : Component(type, game_object, 0)
 {
 	position.Set(0, 0, 0);
 	scale.Set(1, 1, 1);
@@ -79,4 +81,18 @@ float4x4 ComponentTransform::GetTransformationMatrix()
 void ComponentTransform::SetTransformation()
 {
 	transformation = transformation.FromTRS(position, rotation, scale);
+}
+
+void ComponentTransform::EditorTransformation()
+{
+	ImGui::Text("Position");
+	ImGui::DragFloat("X", &position.x); ImGui::SameLine(); ImGui::DragFloat("Y", &position.y); ImGui::SameLine(); ImGui::DragFloat("Z", &position.z);
+	ImGui::Text("Scale");
+	ImGui::DragFloat("X", &scale.x); ImGui::SameLine(); ImGui::DragFloat("Y", &scale.x); ImGui::SameLine(); ImGui::DragFloat("Z", &scale.x);
+	ImGui::Text("Rotation");
+}
+
+void ComponentTransform::Update(uint dt)
+{
+
 }

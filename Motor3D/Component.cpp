@@ -2,48 +2,30 @@
 #include "Globals.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "GameObject.h"
+#include "ComponentTransform.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 
 Component::Component()
 {
 
 }
 
-Component::Component(component_type Type, uint number) : type(Type), id(number)
+Component::Component(component_type Type, GameObject* from, uint number) : type(Type), parent(from), id(number)
 {
-	switch (type)
-	{
-
-	case(COMPONENT_TRANSFORM):
-		break;
-
-	case(COMPONENT_MESH) :
-		break;
-
-	case(COMPONENT_MATERIAL) :
-		break;
-			
-	default:
-		break;
-	}
 }
 
 Component::Component(component_type Type, GameObject* from) : type(Type), parent(from)
 {
-	switch (type)
-	{
+	if(Type == COMPONENT_TRANSFORM)
+		new ComponentTransform(Type, from);
 
-	case(COMPONENT_TRANSFORM) :
-		break;
+	if (Type == COMPONENT_MESH)
+		new ComponentMesh(Type, from);
 
-	case(COMPONENT_MESH) :
-		break;
+	if (Type == COMPONENT_MATERIAL)
+		new ComponentMaterial(Type, from);
 
-	case(COMPONENT_MATERIAL) :
-		break;
-
-	default:
-		break;
-	}
 }
 
 Component::~Component()

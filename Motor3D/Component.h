@@ -17,13 +17,14 @@ class Component
 {
 public:
 	Component();
-	Component(component_type Type, uint number);
+	Component(component_type Type,  GameObject* from, uint number);
 	Component(component_type Type, GameObject* from);
 	~Component();
 
 	virtual void Enable();
 	virtual void Update(float dt);
 	virtual void Disable();
+	virtual void EditorTransformation() {};
 
 public:
 

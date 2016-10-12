@@ -16,8 +16,13 @@ GameObjectManager::~GameObjectManager()
 GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 {
 	GameObject* tmp = new GameObject(parent);
+	
 	if (parent == NULL)
 		root = tmp;
+
+	else
+		parent->childs.push_back(tmp);
+
 	return tmp;
 }
 

@@ -1,16 +1,17 @@
 #pragma once
 #include "GameObject.h"
+#include "ComponentTransform.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 
 GameObject::GameObject() : name("Empty GameObject")
 {
-	CreateComponent(COMPONENT_TRANSFORM, 0);
-	CreateComponent(COMPONENT_MATERIAL, 1);
-	CreateComponent(COMPONENT_MESH, 2);
+
 }
 
-GameObject::GameObject(GameObject* Parent, string _name) : parent(Parent), name(_name)
+GameObject::GameObject(GameObject* Parent, string Name) : parent(Parent), name(Name)
 {
-	
+	transform = CreateComponent(component_type::COMPONENT_TRANSFORM, 0);
 }
 
 GameObject::~GameObject()
@@ -18,9 +19,14 @@ GameObject::~GameObject()
 	components.clear();
 }
 
-void GameObject::Update()
+void GameObject::Update(float dt)
 {
-
+	vector<Component*>::iterator it = components.begin();
+	while (it != components.end())
+	{
+		(*it)->Update(dt);
+		it++;
+	}
 }
 
 void GameObject::AddComponent(Component* component)
@@ -37,17 +43,29 @@ void GameObject::AddComponent(Component* component)
 
 Component* GameObject::CreateComponent(component_type type, uint id_num)
 {
-	Component* new_component = new Component(type, id_num);
 
-	if (new_component->type == COMPONENT_TRANSFORM)
-		transform = new_component;
-	if (new_component->type == COMPONENT_MATERIAL)
-		material = new_component;
-	if (new_component->type == COMPONENT_MESH)
-		mesh = new_component;
+	if (type == COMPONENT_TRANSFORM)
+	{
+		transform = new ComponentTransform(type, this);
+		components.push_back(transform);
+		return transform;
 
-	components.push_back(new_component);
-	return new_component;
+	}
+
+	if (type == COMPONENT_MATERIAL)
+	{
+		material = new ComponentMaterial(type, this);
+		components.push_back(material);
+		return material;
+	}
+
+	if (type == COMPONENT_MESH)
+	{
+		mesh = new ComponentMesh(type, this);
+		components.push_back(mesh);
+		return mesh;
+	}
+
 }
 
 bool GameObject::DeleteComponent(Component* ComponentToDelete)
