@@ -162,11 +162,28 @@ bool ModuleModelLoader::Load(const char* path)
 
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_UVs);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * mesh->num_UVs, mesh->UVs, GL_STATIC_DRAW);
-	
-			}
 
+				//Load Materials
+				if (scene->HasMaterials())
+				{
+					aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+
+					aiString path;
+					material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+					if (path.length > 0)
+					{
+						ComponentMaterial* comp_material = (ComponentMaterial*)new_object->CreateComponent(component_type::COMPONENT_MATERIAL, 0);
+
+						comp_material->texture_id = App->model_loader->LoadTexture(path.data);
+					}
+				}
+			}
+			comp_mesh->mesh = mesh;
 			Meshes.push_back(mesh);
 		}
+
+
 	}
 
 	else

@@ -13,12 +13,24 @@ GameObjectManager::~GameObjectManager()
 		delete root;
 }
 
+bool GameObjectManager::Start()
+{
+	GameObject* root_object = CreateGameObject();
+	root_object->name = "Root GameObject";
+	root = root_object;
+
+	return true;
+}
+
 GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 {
 	GameObject* tmp = new GameObject(parent);
 	
 	if (parent == NULL)
-		root = tmp;
+	{
+		if (root != NULL)
+			root->childs.push_back(tmp);
+	}
 
 	else
 		parent->childs.push_back(tmp);

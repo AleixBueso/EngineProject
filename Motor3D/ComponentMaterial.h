@@ -12,6 +12,8 @@ public:
 	ComponentMaterial(component_type type, GameObject* game_object);
 	~ComponentMaterial();
 
+	void ComponentEditor();
+
 public:
 	uint texture_id = 0;
 };

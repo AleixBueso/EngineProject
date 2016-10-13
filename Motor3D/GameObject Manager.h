@@ -10,6 +10,8 @@ public:
 	GameObjectManager(Application* app, bool start_enabled = true);
 	~GameObjectManager();
 
+	bool Start();
+
 	GameObject* CreateGameObject(GameObject* parent = NULL);
 	void Delete(GameObject* GO_to_delete);
 	

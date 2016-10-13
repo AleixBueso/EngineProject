@@ -14,6 +14,8 @@ public:
 	ComponentMesh(component_type type, GameObject* game_object);
 	~ComponentMesh();
 
+	void ComponentEditor();
+
 public:
 	MyMesh* mesh = NULL;
 	
