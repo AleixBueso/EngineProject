@@ -86,9 +86,11 @@ void ComponentTransform::SetTransformation()
 void ComponentTransform::ComponentEditor()
 {
 	ImGui::Text("Position");
-	ImGui::DragFloat("X", &position.x); ImGui::SameLine(); ImGui::DragFloat("Y", &position.y); ImGui::SameLine(); ImGui::DragFloat("Z", &position.z);
+	ImGui::Text("     X           Y            Z");
+	ImGui::DragFloat3("", position.ptr(), 1.0f);
 	ImGui::Text("Scale");
-	ImGui::DragFloat("X", &scale.x); ImGui::SameLine(); ImGui::DragFloat("Y", &scale.x); ImGui::SameLine(); ImGui::DragFloat("Z", &scale.x);
+	ImGui::Text("     X           Y            Z");
+	ImGui::DragFloat3("", scale.ptr(), 1.0f);
 	ImGui::Text("Rotation");
 }
 
