@@ -1,6 +1,7 @@
 
 #include"GameObject Manager.h"
 #include "GameObject.h"
+#include "Application.h"
 
 GameObjectManager::GameObjectManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -35,6 +36,8 @@ GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 	else
 		parent->childs.push_back(tmp);
 
+	all_gameobjects.push_back(tmp);
+
 	return tmp;
 }
 
@@ -62,4 +65,15 @@ void GameObjectManager::Delete(GameObject* GO_to_delete)
 	}
 
 	delete GO_to_delete;
+}
+
+update_status GameObjectManager::Update(float dt)
+{
+	list<GameObject*>::const_iterator it = all_gameobjects.begin();
+	while (it != all_gameobjects.end())
+	{
+		App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+		it++;
+	}
+	return update_status::UPDATE_CONTINUE;
 }

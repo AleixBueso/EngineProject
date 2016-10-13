@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _GOMANAGER_H_
+#define _GOMANAGER_H_
+
 #include "Globals.h"
 #include "Module.h"
 #include "GameObject.h"
@@ -11,11 +13,15 @@ public:
 	~GameObjectManager();
 
 	bool Start();
+	update_status Update(float dt);
 
 	GameObject* CreateGameObject(GameObject* parent = NULL);
 	void Delete(GameObject* GO_to_delete);
 	
 	public:
 	GameObject* root = NULL;
+	list<GameObject*> all_gameobjects;
 
 };
+
+#endif // _GOMANAGER_H_

@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class GameObject
+class GameObject 
 {
 public:
 

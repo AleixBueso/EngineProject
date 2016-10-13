@@ -23,12 +23,14 @@ GameObject::~GameObject()
 
 void GameObject::Update(float dt)
 {
+
 	vector<Component*>::iterator it = components.begin();
 	while (it != components.end())
 	{
 		(*it)->Update(dt);
 		it++;
 	}
+
 }
 
 void GameObject::AddComponent(Component* component)

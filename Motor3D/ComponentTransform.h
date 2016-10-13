@@ -39,6 +39,8 @@ public:
 	Quat rotation;
 	float3 rotation_degree;
 
+	math::float3 rotation_euler = math::float3::zero;
+
 	float4x4 transformation = float4x4::identity;
 	float4x4 final_transformation = float4x4::identity;
 	 

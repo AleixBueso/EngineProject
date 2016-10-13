@@ -66,9 +66,6 @@ bool ModuleModelLoader::CleanUp()
 
 update_status ModuleModelLoader::Update(float dt)
 {
-	for (uint i = 0; i < Meshes.size(); i++)
-		App->renderer3D->DrawMesh(*Meshes[i]);
-
 	if (texture_enabled)
 		glEnable(GL_TEXTURE_2D);
 	else

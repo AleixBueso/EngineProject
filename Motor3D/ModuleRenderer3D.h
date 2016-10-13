@@ -4,6 +4,9 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "Light.h"
 #include "ModuleModelLoader.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
+#include "ComponentTransform.h"
 
 
 #define MAX_LIGHTS 8
@@ -25,7 +28,7 @@ public:
 
 	void OnResize(int width, int height, float fovy);
 
-	void DrawMesh(MyMesh mesh);
+	void DrawMesh(ComponentMesh* mesh = NULL, ComponentTransform* transfrom = NULL, ComponentMaterial* material = NULL);
 	bool LoadMeshBuffer(const MyMesh* mesh);
 
 public:
