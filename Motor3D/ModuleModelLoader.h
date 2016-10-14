@@ -49,11 +49,11 @@ public:
 
 	bool Load(const char* path);
 
-	//void LoadMesh(const aiMesh* mesh, const aiScene* scene);
+	void LoadMesh(MyMesh* mesh);
 
 	uint LoadTexture(const char* path);
 
-	void CreateCube();
+	void CreateCube(MyMesh* recource);
 
 	vector<MyMesh*> Meshes;
 

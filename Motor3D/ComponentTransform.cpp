@@ -6,6 +6,7 @@ ComponentTransform::ComponentTransform(component_type type, GameObject* game_obj
 {
 	position.Set(0, 0, 0);
 	scale.Set(1, 1, 1);
+	rotation_degree.Set(0, 0, 0);
 	rotation.Set(0, 0, 0, 0);
 }
 
@@ -75,7 +76,7 @@ float3 ComponentTransform::GetRotation()
 
 float4x4 ComponentTransform::GetTransformationMatrix()
 {
-	return final_transformation.Transposed();
+	return transformation.Transposed();
 }
 
 void ComponentTransform::SetTransformation()
@@ -85,16 +86,26 @@ void ComponentTransform::SetTransformation()
 
 void ComponentTransform::ComponentEditor()
 {
+	float3 new_pos = position;
 	ImGui::Text("Position");
 	ImGui::Text("     X           Y            Z");
-	ImGui::DragFloat3("", position.ptr(), 1.0f);
+	if (ImGui::DragFloat3("pos", new_pos.ptr(), 0.5f))
+		SetTranslation(new_pos);
+
+	float3 new_scale = scale;
 	ImGui::Text("Scale");
 	ImGui::Text("     X           Y            Z");
-	ImGui::DragFloat3("", scale.ptr(), 1.0f);
+	if (ImGui::DragFloat3("scl", new_scale.ptr(), 0.5f))
+		SetScale(new_scale);
+
+	float3 new_rotation = rotation_degree;
 	ImGui::Text("Rotation");
+	ImGui::Text("     X           Y            Z");
+	if (ImGui::DragFloat3("rot", new_rotation.ptr(), 0.5f), 360, -360)
+		SetRotation(new_rotation);
 }
 
-void ComponentTransform::Update(uint dt)
+void ComponentTransform::Update(float dt)
 {
-
+	SetTransformation();
 }

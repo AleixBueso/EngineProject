@@ -83,16 +83,19 @@ bool ModuleModelLoader::LoadModel(const char* full_path)
 
 bool ModuleModelLoader::Load(const char* path)
 {
-	GameObject* new_object = App->gameobject_manager->CreateGameObject();
-	new_object->name = "Loaded fbx";
-
 	bool ret = true;
+
+
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		GameObject* new_object = App->gameobject_manager->CreateGameObject();
+		new_object->name = "Loaded fbx";
+
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
+
 			ComponentMesh* comp_mesh = (ComponentMesh*)new_object->CreateComponent(component_type::COMPONENT_MESH, 0);
 
 			LOG("[start] New mesh ----------------------------------------------------");
@@ -158,7 +161,7 @@ bool ModuleModelLoader::Load(const char* path)
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_normals * 3, mesh->normals, GL_STATIC_DRAW);
 
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->id_UVs);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * mesh->num_UVs, mesh->UVs, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float2) * mesh->num_UVs * 2, mesh->UVs, GL_STATIC_DRAW);
 
 				//Load Materials
 				if (scene->HasMaterials())
@@ -203,86 +206,44 @@ uint ModuleModelLoader::LoadTexture(const char* path)
 
 }
 
-/*void ModuleModelLoader::LoadMesh(const aiMesh* mesh, const aiScene* scene)
+void ModuleModelLoader::LoadMesh(MyMesh* mesh)
 {
-	MyMesh* new_mesh = new MyMesh();
+	// Generate VBO to send all this mesh information to the graphics card
 
-	//vertices
-	glGenBuffers(1, (GLuint*)&(new_mesh->id_vertices));
+	// Buffer for vertices
+	glGenBuffers(1, (GLuint*) &(mesh->id_vertices));
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->vertices, GL_STATIC_DRAW);
 
-	new_mesh->num_vertices = mesh->mNumVertices;
-	new_mesh->vertices = new float[new_mesh->num_vertices * 3];
-	memcpy(new_mesh->vertices, mesh->mVertices, sizeof(float) * new_mesh->num_vertices * 3);
-	LOG("New mesh with %d vertices", new_mesh->num_vertices);
+	// Buffer for indices
+	glGenBuffers(1, (GLuint*) &(mesh->id_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_vertices);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_vertices * 3, new_mesh->vertices, GL_STATIC_DRAW);
-
-
-
-	//indices
-	if (mesh->HasFaces())
+	// Buffer for normals
+	if (mesh->normals != nullptr)
 	{
-		glGenBuffers(1, (GLuint*)&(new_mesh->id_indices));
-
-
-		new_mesh->num_indices = mesh->mNumFaces * 3;
-		new_mesh->indices = new uint[new_mesh->num_indices]; // assume each face is a triangle
-		for (uint i = 0; i < mesh->mNumFaces; ++i)
-		{
-			if (mesh->mFaces[i].mNumIndices != 3)
-			{
-				LOG("WARNING, geometry face with != 3 indices!");
-
-			}
-
-			else
-				memcpy(&new_mesh->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-		}
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_indices);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_indices, new_mesh->indices, GL_STATIC_DRAW);
-
+		glGenBuffers(1, (GLuint*) &(mesh->id_normals));
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->normals, GL_STATIC_DRAW);
 	}
 
-
-	//normals
-
-	if (mesh->HasNormals())
+	// Buffer for vertex colors
+	/*if (mesh->colors != nullptr)
 	{
-		glGenBuffers(1, (GLuint*)&(new_mesh->id_normals));
-
-		new_mesh->num_normals = new_mesh->num_vertices;
-		new_mesh->normals = new float[new_mesh->num_normals * 3];
-		memcpy(new_mesh->normals, mesh->mNormals, sizeof(float) * new_mesh->num_normals * 3);
-
-		glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_normals);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_normals * 3, new_mesh->normals, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*) &(mesh->id_colors));
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->vbo_colors);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->colors, GL_STATIC_DRAW);
 	}
-
-	if (mesh->HasTextureCoords(0))
+	*/
+	// Buffer for texture coords
+	if (mesh->texture_coords != nullptr)
 	{
-		glGenBuffers(1, (GLuint*)&(new_mesh->id_texture_coords));
-
-		new_mesh->num_texture_coords = new_mesh->num_vertices;
-		new_mesh->texture_coords = new float[new_mesh->num_texture_coords * 2];
-
-		aiVector3D* vector = mesh->mTextureCoords[0];
-
-		for (uint i = 0; i < new_mesh->num_texture_coords * 2; i += 2)
-		{
-			new_mesh->texture_coords[i] = vector->x;
-			new_mesh->texture_coords[i + 1] = vector->y;
-			vector++;
-		}
-
-		glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_texture_coords);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_texture_coords * 2, new_mesh->texture_coords, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*) &(mesh->id_texture_coords));
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_texture_coords);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, mesh->texture_coords, GL_STATIC_DRAW);
 	}
-
-	Meshes.push_back(new_mesh);
-
-}*/
+}
 
 bool ModuleRenderer3D::LoadMeshBuffer(const MyMesh* mesh)
 {
@@ -343,107 +304,97 @@ bool ModuleRenderer3D::LoadMeshBuffer(const MyMesh* mesh)
 	return ret;
 }
 
-void ModuleModelLoader::CreateCube()
+void ModuleModelLoader::CreateCube(MyMesh* resource)
 {
-	uint my_id = 5;
+	//  indices -------------------------
+	/* without extra vertices for texturing:
+	uint indicescw[6 * 6] =
+	{
+	2, 7, 6, 2, 3, 7, // front
+	3, 4, 7, 3, 0, 4, // right
+	1, 4, 0, 1, 5, 4, // back
+	2, 5, 1, 2, 6, 5, // left
+	1, 3, 2, 1, 0, 3, // top
+	7, 5, 6, 7, 4, 5  // bottom
+	};*/
 
-	glLineWidth(2.0f);
-	glBegin(GL_TRIANGLES);
+	uint indicescw[6 * 6] =
+	{
+		2, 7, 6, 2, 3, 7, // front
+		11, 9, 10, 11, 8, 9, // right
+		1, 4, 0, 1, 5, 4, // back
+		15, 13, 12, 15, 14, 13, // left
+		1, 3, 2, 1, 0, 3, // top
+		7, 5, 6, 7, 4, 5  // bottom
+	};
 
-	//-----------------------
-	glTexCoord2f(0, 0);
-	glVertex3f(0.f, 0.f, 0.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.f, 2.f, 0.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.f, 0.f, 2.f);
+	resource->num_indices = 6 * 6;
+	uint bytes = sizeof(uint) * resource->num_indices;
+	resource->indices = new uint[resource->num_indices];
+	memcpy(resource->indices, indicescw, bytes);
 
-	glTexCoord2f(0, 1);
-	glVertex3f(0.f, 2.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.f, 2.f, 2.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.f, 0.f, 2.f);
+	//  vertices ------------------------
+	float vertices[16 * 3] =
+	{
+		0.5f,  0.5f,  0.5f, // 0
+		-0.5f,  0.5f,  0.5f, // 1
+		-0.5f,  0.5f, -0.5f, // 2
+		0.5f,  0.5f, -0.5f, // 3
 
-	//-----------------------
-	glTexCoord2f(0, 0);
-	glVertex3f(0.f, 2.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 2.f, 2.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.f, 2.f, 2.f);
+		0.5f, -0.5f,  0.5f, // 4
+		-0.5f, -0.5f,  0.5f, // 5
+		-0.5f, -0.5f, -0.5f, // 6
+		0.5f, -0.5f, -0.5f, // 7
 
-	glTexCoord2f(1, 0);
-	glVertex3f(0.f, 2.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 2.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 2.f, 2.f);
+							// add repeated vertices for proper texturing
+							0.5f,  0.5f,  0.5f,  // 8
+							0.5f, -0.5f,  0.5f,  // 9
+							0.5f, -0.5f, -0.5f,  //10
+							0.5f,  0.5f, -0.5f,  //11
 
-	//-----------------------
-	glTexCoord2f(0, 0);
-	glVertex3f(0.f, 0.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 2.f, 0.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.f, 2.f, 0.f);
+							-0.5f,  0.5f,  0.5f,  //12
+							-0.5f, -0.5f,  0.5f,  //13
+							-0.5f, -0.5f, -0.5f,  //14
+							-0.5f,  0.5f, -0.5f,  //15
+	};
 
-	glTexCoord2f(0, 1);
-	glVertex3f(0.f, 0.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 0.f, 0.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-2.f, 2.f, 0.f);
+	resource->num_vertices = 16;
+	bytes = sizeof(float) * resource->num_vertices * 3;
+	resource->vertices = new float[resource->num_vertices * 3];
+	memcpy(resource->vertices, vertices, bytes);
 
-	//-----------------------
-	glTexCoord2f(0, 0);
-	glVertex3f(-2.f, 0.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 2.f, 2.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-2.f, 2.f, 0.f);
-	
-	glTexCoord2f(0, 1);
-	glVertex3f(-2.f, 0.f, 0.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 0.f, 2.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-2.f, 2.f, 2.f);
-	
-	//-----------------------
-	glTexCoord2f(0, 0);	
-	glVertex3f(-2.f, 0.f, 2.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.f, 0.f, 2.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.f, 2.f, 2.f);
-	
-	glTexCoord2f(0, 0);
-	glVertex3f(-2.f, 0.f, 2.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.f, 2.f, 2.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-2.f, 2.f, 2.f);
+	// Load texture coords
+	float texture_coords[16 * 3] =
+	{
+		1.f,  1.f,  0.f,
+		0.f,  1.f,  0.f,
+		0.f,  0.f,  0.f,
+		1.f,  0.f,  0.f,
 
-	//-----------------------
+		1.f,  0.f,  0.f,
+		0.f,  0.f,  0.f,
+		0.f,  1.f,  0.f,
+		1.f,  1.f,  0.f,
 
-	glTexCoord2f(0, 0);
-	glVertex3f(0.f, 0.f, 0.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.f, 0.f, 2.f);
-	glTexCoord2f(0, 1);
-	glVertex3f(-2.f, 0.f, 0.f);
-	
-	glTexCoord2f(0, 1);
-	glVertex3f(0.f, 0.f, 2.f);
-	glTexCoord2f(1, 1);
-	glVertex3f(-2.f, 0.f, 2.f);
-	glTexCoord2f(1, 0);
-	glVertex3f(-2.f, 0.f, 0.f);
-	glEnd();
-	
-	glBindBuffer(GL_VERTEX_ARRAY, my_id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glLineWidth(1.0f);
+		// extra coords for left - right
+		1.f,  1.f,  0.f,
+		0.f,  1.f,  0.f,
+		0.f,  0.f,  0.f,
+		1.f,  0.f,  0.f,
+
+		0.f,  1.f,  0.f,
+		1.f,  1.f,  0.f,
+		1.f,  0.f,  0.f,
+		0.f,  0.f,  0.f,
+	};
+
+	resource->texture_coords = new float[resource->num_vertices * 3];
+	memcpy(resource->texture_coords, texture_coords, bytes);
+
+	// AABB
+	//resource->bbox = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+
+	// Now generate VBOs
+	LoadMesh(resource);
 
 }

@@ -6,6 +6,7 @@
 #include "SDL\include\SDL.h"
 
 #include "Imgui\imgui.h"
+#include "ModuleModelLoader.h"
 
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "MathGeoLib\include\MathBuildConfig.h"
@@ -28,8 +29,10 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	//App->model_loader->Load("Models/Tank.fbx");
 	App->model_loader->Load("Models/Test_2.fbx");
+	//App->model_loader->Load("Models/Town/Street Environment_V01.fbx");
+	//MyMesh* mesh = new MyMesh();
+	//App->model_loader->CreateCube(mesh);
 
 	//lenna_id = App->model_loader->LoadTexture("lenna.png");
 

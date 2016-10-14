@@ -37,15 +37,6 @@ void Component::Enable()
 	enabled = true;
 }
 
-void Component::Update(float dt)
-{
-	if (enabled)
-	{
-
-	}
-
-}
-
 void Component::Disable()
 {
 	enabled = false;

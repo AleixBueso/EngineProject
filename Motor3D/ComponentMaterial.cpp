@@ -1,9 +1,10 @@
 #include "ComponentMaterial.h"
 #include "Imgui\imgui.h"
 
-ComponentMaterial::ComponentMaterial(component_type type, GameObject* game_object) : Component(type, game_object)
+ComponentMaterial::ComponentMaterial(component_type type, GameObject* game_object)
 {
-
+	this->type = type;
+	this->parent = game_object;
 }
 
 ComponentMaterial::~ComponentMaterial()

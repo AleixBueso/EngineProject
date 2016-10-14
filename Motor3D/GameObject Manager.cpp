@@ -69,10 +69,12 @@ void GameObjectManager::Delete(GameObject* GO_to_delete)
 
 update_status GameObjectManager::Update(float dt)
 {
+
 	list<GameObject*>::const_iterator it = all_gameobjects.begin();
 	while (it != all_gameobjects.end())
 	{
 		App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+		(*it)->Update(dt);
 		it++;
 	}
 	return update_status::UPDATE_CONTINUE;

@@ -30,7 +30,7 @@ public:
 	void SetTransformation();
 	void ComponentEditor();
 
-	void Update(uint dt);
+	void Update(float dt);
 
 public:
 	 
