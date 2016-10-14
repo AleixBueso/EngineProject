@@ -254,13 +254,12 @@ void ModuleEditor::CreateHierarchy()
 				SelectedObject = (App->gameobject_manager->root);
 			}
 
-			else
+			if(App->gameobject_manager->root->childs.empty() == false)
 				ShowChilds(App->gameobject_manager->root);
 
 			ImGui::TreePop();
 		}
 	}
-
 	ImGui::End();
 }
 

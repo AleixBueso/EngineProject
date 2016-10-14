@@ -9,10 +9,9 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
-	model_loader = new ModuleModelLoader(this);
 	editor = new ModuleEditor(this);
 	gameobject_manager = new GameObjectManager(this);
-
+	model_loader = new ModuleModelLoader(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -25,8 +24,9 @@ Application::Application()
 	AddModule(audio);
 	AddModule(physics);
 	AddModule(editor);
-	AddModule(model_loader);
 	AddModule(gameobject_manager);
+	AddModule(model_loader);
+
 	
 	// Scenes
 	AddModule(scene_intro);

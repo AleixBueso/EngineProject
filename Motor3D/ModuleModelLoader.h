@@ -2,6 +2,13 @@
 #include "Globals.h"
 #include "Module.h"
 #include "MathGeoLib\include\MathGeoLib.h"
+#include "GameObject.h"
+
+#include "Assimp\include\cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
 struct MyMesh
@@ -45,20 +52,23 @@ public:
 
 	update_status Update(float dt);
 
-	bool LoadModel(const char* full_path);
+	void LoadPath(const char* full_path);
 
 	bool Load(const char* path);
 
 	void LoadMesh(MyMesh* mesh);
 
+	void LoadMesh2(const aiMesh* mesh, const aiScene* scene, GameObject* parent);
+
 	uint LoadTexture(const char* path);
 
-	void CreateCube(MyMesh* recource);
+	GameObject* LoadNode(const aiNode* node, const aiScene* scene, GameObject* parent);
 
 	vector<MyMesh*> Meshes;
 
 	uint ImageName;
 	bool texture_enabled = false;
+	GameObject* loader_it = nullptr;
 	
 
 

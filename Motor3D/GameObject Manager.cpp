@@ -16,9 +16,9 @@ GameObjectManager::~GameObjectManager()
 
 bool GameObjectManager::Start()
 {
-	GameObject* root_object = CreateGameObject();
+	GameObject* root_object = App->gameobject_manager->CreateGameObject();
 	root_object->name = "Root GameObject";
-	root = root_object;
+	App->gameobject_manager->root = root_object;
 
 	return true;
 }
