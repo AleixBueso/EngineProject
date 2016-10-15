@@ -195,7 +195,6 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	//glEnable(GL_TEXTURE_2D);
 
 	if (mesh)
 	{
@@ -205,15 +204,23 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_UVs);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
+
+		if (App->model_loader->texture_enabled)
+			glEnable(GL_TEXTURE_2D);
+
 		if (material != NULL)
 			glBindTexture(GL_TEXTURE_2D, material->texture_id);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
+		if (App->model_loader->texture_enabled)
+			glDisable(GL_TEXTURE_2D);
+
+
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
 	}
+	
+	
 
-
-	//glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 

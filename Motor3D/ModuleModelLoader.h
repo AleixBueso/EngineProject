@@ -67,7 +67,7 @@ public:
 	std::vector<MyMesh*> Meshes;
 
 	uint ImageName;
-	bool texture_enabled = false;
+	bool texture_enabled = true;
 	GameObject* loader_it = nullptr;
 	
 

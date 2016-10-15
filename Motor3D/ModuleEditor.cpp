@@ -141,10 +141,10 @@ void ModuleEditor::AttributeEditor()
 	else
 	{
 		// Change the name
-		char* new_name = new char[20];
-		strcpy(new_name, SelectedObject->name.data());
-		ImGui::InputText("Name", new_name, 20);
-		SelectedObject->name = new_name;
+		//char* new_name = new char[20];
+		//strcpy(new_name, SelectedObject->name.data());
+		ImGui::Text("Name");
+		//SelectedObject->name = new_name;
 
 		//Transformation
 		if (ImGui::CollapsingHeader("Transformation"));

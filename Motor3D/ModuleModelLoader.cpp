@@ -66,11 +66,6 @@ bool ModuleModelLoader::CleanUp()
 
 update_status ModuleModelLoader::Update(float dt)
 {
-	if (texture_enabled)
-		glEnable(GL_TEXTURE_2D);
-	else
-		glDisable(GL_TEXTURE_2D);
-
 	return UPDATE_CONTINUE;
 };
 
@@ -243,7 +238,7 @@ GameObject* ModuleModelLoader::LoadNode(const aiNode* node, const aiScene* scene
 
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
-		(LoadNode(node->mChildren[i], scene, game_object));
+		LoadNode(node->mChildren[i], scene, game_object);
 	}
 
 	return game_object;
@@ -340,6 +335,7 @@ MyMesh* ModuleModelLoader::LoadMesh2(const aiMesh* mesh, const aiScene* scene, G
 		{
 			ComponentMaterial* comp_material = (ComponentMaterial*)new_object->CreateComponent(component_type::COMPONENT_MATERIAL, 0);
 			comp_material->texture_id = App->model_loader->LoadTexture(path.data);
+			LOG("Texture id %i Load: %s", comp_material->texture_id, path.data);
 		}
 	}
 
