@@ -189,13 +189,15 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 {
 	glColor4f(1, 1, 1, 1);
 	glPushMatrix();
-	glMultMatrixf(*transform->GetTransformationMatrix().v);
+
+	if(transform)
+		glMultMatrixf(*transform->GetTransformationMatrix().v);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 
-	if (mesh->mesh != NULL)
+	if (mesh)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -211,7 +213,7 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	}
 
 
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 

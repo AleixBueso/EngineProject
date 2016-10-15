@@ -11,9 +11,9 @@ GameObject::GameObject() : name("Empty GameObject")
 
 GameObject::GameObject(GameObject* Parent, string Name) : parent(Parent), name(Name)
 {
-	transform = CreateComponent(component_type::COMPONENT_TRANSFORM, 0);
-	material = CreateComponent(component_type::COMPONENT_MATERIAL, 0);
-	mesh = CreateComponent(component_type::COMPONENT_MESH, 0);
+	//transform = CreateComponent(component_type::COMPONENT_TRANSFORM, 0);
+	//material = CreateComponent(component_type::COMPONENT_MATERIAL, 0);
+	//mesh = CreateComponent(component_type::COMPONENT_MESH, 0);
 }
 
 GameObject::~GameObject()
@@ -109,6 +109,7 @@ void GameObject::SetParent(GameObject* Parent)
 void GameObject::AddChild(GameObject* child)
 {
 	childs.push_back(child);
+	//child->parent = this;
 }
 
 void GameObject::RemoveChild(GameObject* child)

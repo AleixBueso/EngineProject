@@ -29,8 +29,8 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->model_loader->LoadPath("Models/Town/Street Environment_V01.fbx");
-	//App->model_loader->Load("Models/Town/Street Environment_V01.fbx");
+	//App->model_loader->LoadPath("Models/Tank.fbx");
+	App->model_loader->LoadPath("Models/Tank.fbx");
 	//MyMesh* mesh = new MyMesh();
 	//App->model_loader->CreateCube(mesh);
 

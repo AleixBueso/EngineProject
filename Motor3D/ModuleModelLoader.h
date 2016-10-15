@@ -52,13 +52,13 @@ public:
 
 	update_status Update(float dt);
 
-	void LoadPath(const char* full_path);
+	GameObject* LoadPath(const char* full_path);
 
 	bool Load(const char* path);
 
 	void LoadMesh(MyMesh* mesh);
 
-	void LoadMesh2(const aiMesh* mesh, const aiScene* scene, GameObject* parent);
+	MyMesh* LoadMesh2(const aiMesh* mesh, const aiScene* scene, GameObject* new_gameobject);
 
 	uint LoadTexture(const char* path);
 

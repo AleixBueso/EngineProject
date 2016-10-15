@@ -24,6 +24,15 @@ void ComponentTransform::SetTranslation(float3 new_pos)
 	SetTransformation();
 }
 
+void ComponentTransform::SetTranslation(float x, float y, float z)
+{
+	position.x = x;
+	position.y = y;
+	position.z = z;
+
+	SetTransformation();
+}
+
 float3 ComponentTransform::GetTranslation()
 {
 	return position;
@@ -34,8 +43,15 @@ void ComponentTransform::SetScale(float3 new_scale)
 	scale.Set(new_scale.x, new_scale.y, new_scale.z);
 
 	SetTransformation();
-
 }
+
+void ComponentTransform::SetScale(float x, float y, float z)
+{
+	scale.Set(x, y, z);
+
+	SetTransformation();
+}
+
 float3 ComponentTransform::GetScale()
 {
 	return scale;
@@ -52,6 +68,13 @@ void ComponentTransform::SetRotation(float3 rot)
 	rotation_rad.z = DegToRad(rotation_degree.z);
 
 	rotation = Quat::FromEulerXYZ(rotation_rad.x, rotation_rad.y, rotation_rad.z);
+
+	SetTransformation();
+}
+
+void ComponentTransform::SetRotation(float x, float y, float z, float w)
+{
+	rotation.Set(x, y, z, w);
 
 	SetTransformation();
 }

@@ -29,12 +29,11 @@ GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 	
 	if (parent == NULL)
 	{
-		if (root != NULL)
-			root->childs.push_back(tmp);
+		root = tmp;
 	}
 
 	else
-		parent->childs.push_back(tmp);
+		parent->AddChild(tmp);
 
 	all_gameobjects.push_back(tmp);
 
