@@ -8,15 +8,12 @@
 #include <list>
 #include <vector>
 
-
-using namespace std;
-
 class GameObject 
 {
 public:
 
 	GameObject();
-	GameObject(GameObject* Parent = NULL, string Name = "Empty GameObject");
+	GameObject(GameObject* Parent = NULL, std::string Name = "Empty GameObject");
 	~GameObject();
 
 	void Update(float dt);
@@ -40,11 +37,11 @@ public:
 	Component* material = nullptr;
 	Component* mesh = nullptr;
 
-	vector<Component*> components;
+	std::vector<Component*> components;
 	GameObject* parent;
-	list<GameObject*> childs;
+	std::list<GameObject*> childs;
 	
-	string name;
+	std::string name;
 };
 
 #endif // GAMEOBJECT_H

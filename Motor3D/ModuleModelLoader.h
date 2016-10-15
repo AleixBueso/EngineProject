@@ -64,7 +64,7 @@ public:
 
 	GameObject* LoadNode(const aiNode* node, const aiScene* scene, GameObject* parent);
 
-	vector<MyMesh*> Meshes;
+	std::vector<MyMesh*> Meshes;
 
 	uint ImageName;
 	bool texture_enabled = false;

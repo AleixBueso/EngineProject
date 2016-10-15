@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	//App->model_loader->LoadPath("Models/Tank.fbx");
-	App->model_loader->LoadPath("Models/Tank.fbx");
+	App->model_loader->LoadPath("Models/Town/Street environment_V01.fbx");
 	//MyMesh* mesh = new MyMesh();
 	//App->model_loader->CreateCube(mesh);
 

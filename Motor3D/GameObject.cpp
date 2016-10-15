@@ -4,6 +4,8 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 
+using namespace std;
+
 GameObject::GameObject() : name("Empty GameObject")
 {
 

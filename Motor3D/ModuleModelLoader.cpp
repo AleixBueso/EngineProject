@@ -216,13 +216,7 @@ uint ModuleModelLoader::LoadTexture(const char* path)
 
 GameObject* ModuleModelLoader::LoadNode(const aiNode* node, const aiScene* scene, GameObject* parent)
 {			
-	static uint num = 0;
 	GameObject* game_object = App->gameobject_manager->CreateGameObject(parent);
-	game_object->name = "Loaded fbx";
-	LOG("loaded num %i", num++);
-
-	//char* tmp[256];
-	//memcpy((char*)game_object->name.data, node->mName.data, node->mName.length + 1);
 	game_object->name = node->mName.data;
 
 	//transformation
@@ -249,7 +243,7 @@ GameObject* ModuleModelLoader::LoadNode(const aiNode* node, const aiScene* scene
 
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
-		game_object->AddChild(LoadNode(node->mChildren[i], scene, game_object));
+		(LoadNode(node->mChildren[i], scene, game_object));
 	}
 
 	return game_object;

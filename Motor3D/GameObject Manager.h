@@ -20,7 +20,7 @@ public:
 	
 	public:
 	GameObject* root = NULL;
-	list<GameObject*> all_gameobjects;
+	std::list<GameObject*> all_gameobjects;
 
 };
 
