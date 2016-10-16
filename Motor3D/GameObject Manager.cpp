@@ -10,8 +10,17 @@ GameObjectManager::GameObjectManager(Application* app, bool start_enabled) : Mod
 
 GameObjectManager::~GameObjectManager()
 {
-	if(root != NULL)
-		delete root;
+	if (root != NULL)
+		root = nullptr;
+
+	std::list<GameObject*>::iterator it = all_gameobjects.begin();
+	while (it != all_gameobjects.end())
+	{
+		delete (*it);
+		it++;
+	}
+
+	all_gameobjects.clear();
 }
 
 bool GameObjectManager::Start()
@@ -28,9 +37,7 @@ GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 	GameObject* tmp = new GameObject(parent);
 	
 	if (parent == NULL)
-	{
 		root = tmp;
-	}
 
 	else
 		parent->AddChild(tmp);
@@ -42,28 +49,19 @@ GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 
 void GameObjectManager::Delete(GameObject* GO_to_delete)
 {
-	GameObject* tmp = GO_to_delete;
-
-	//Find last child
-	while (tmp->childs.empty())
-		tmp = *tmp->childs.begin();
-
-	//Delete children to top
-	while (tmp != GO_to_delete)
+	if (GO_to_delete->childs.empty() == false)
 	{
-		tmp = tmp->parent;
-
-		//erase childs
-		list<GameObject*>::const_iterator it = GO_to_delete->childs.begin();
+		std::list<GameObject*>::iterator it = GO_to_delete->childs.begin();
 		while (it != GO_to_delete->childs.end())
 		{
-			delete *it;
+			Delete(*it);
+			it++;
 		}
-
-		tmp->childs.clear();
+		GO_to_delete->childs.clear();
 	}
 
-	delete GO_to_delete;
+	if(GO_to_delete->childs.empty())
+		delete GO_to_delete;
 }
 
 update_status GameObjectManager::Update(float dt)

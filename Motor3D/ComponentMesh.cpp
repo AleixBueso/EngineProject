@@ -17,7 +17,7 @@ ComponentMesh::ComponentMesh(component_type type, GameObject* game_object)
 
 ComponentMesh::~ComponentMesh()
 {
-
+	delete mesh;
 }
 
 void ComponentMesh::ComponentEditor()

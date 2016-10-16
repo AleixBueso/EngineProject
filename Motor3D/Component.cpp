@@ -30,6 +30,7 @@ Component::Component(component_type Type, GameObject* from) : type(Type), parent
 
 Component::~Component()
 {
+	
 }
 
 void Component::Enable()

@@ -20,6 +20,9 @@ GameObject::GameObject(GameObject* Parent, string Name) : parent(Parent), name(N
 
 GameObject::~GameObject()
 {
+	for (uint i = 0; i < components.size(); i++)
+		delete components[i];
+
 	components.clear();
 }
 
