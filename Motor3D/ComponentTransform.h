@@ -29,9 +29,11 @@ public:
 	float3 GetRotation();
 
 	float4x4 GetTransformationMatrix();
+	void SetTransformation(math::float4x4 new_matrix);
 
 	void SetTransformation();
 	void ComponentEditor();
+
 
 	void Update(float dt);
 

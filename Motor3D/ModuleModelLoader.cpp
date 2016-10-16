@@ -334,11 +334,17 @@ MyMesh* ModuleModelLoader::LoadMesh2(const aiMesh* mesh, const aiScene* scene, G
 		if (path.length > 0)
 		{
 			ComponentMaterial* comp_material = (ComponentMaterial*)new_object->CreateComponent(component_type::COMPONENT_MATERIAL, 0);
-			comp_material->texture_id = App->model_loader->LoadTexture(path.data);
+			std::string complete_path = "Game";
+			std::string path_2 = path.data;
+			path_2.erase(0, 2);
+			complete_path = complete_path + path_2;
+			LOG("%s", complete_path.data());
+
+			comp_material->texture_id = App->model_loader->LoadTexture(complete_path.data());
+			comp_material->path = path.data;
 			LOG("Texture id %i Load: %s", comp_material->texture_id, path.data);
 		}
 	}
-
 
 	Meshes.push_back(new_mesh);
 	return new_mesh;

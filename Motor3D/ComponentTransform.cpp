@@ -132,3 +132,8 @@ void ComponentTransform::Update(float dt)
 {
 	SetTransformation();
 }
+
+void ComponentTransform::SetTransformation(math::float4x4 new_matrix)
+{
+	transformation = new_matrix;
+}

@@ -2,6 +2,7 @@
 #define COMPONENT_H
 
 #include "Globals.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 
 
 class GameObject;
@@ -25,6 +26,8 @@ public:
 	virtual void Update(float dt) {};
 	virtual void Disable();
 	virtual void ComponentEditor() {};
+	virtual void SetTransformation(math::float4x4 new_matrix) {};
+	virtual math::float4x4 GetTransformationMatrix() { math::float4x4 ret = math::float4x4::identity; return ret; };
 
 public:
 

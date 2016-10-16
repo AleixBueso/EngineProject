@@ -215,7 +215,6 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 		if (App->model_loader->texture_enabled)
 			glDisable(GL_TEXTURE_2D);
 
-
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
 	}
 	
