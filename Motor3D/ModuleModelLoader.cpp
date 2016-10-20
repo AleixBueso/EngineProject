@@ -303,6 +303,7 @@ MyMesh* ModuleModelLoader::LoadMesh2(const aiMesh* mesh, const aiScene* scene, G
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_normals * 3, new_mesh->normals, GL_STATIC_DRAW);
 	}
 
+	//TextureCoords
 	if (mesh->HasTextureCoords(0))
 	{
 		glGenBuffers(1, (GLuint*)&(new_mesh->id_texture_coords));
