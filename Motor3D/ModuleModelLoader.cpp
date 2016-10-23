@@ -308,16 +308,12 @@ MyMesh* ModuleModelLoader::LoadMesh2(const aiMesh* mesh, const aiScene* scene, G
 	{
 		glGenBuffers(1, (GLuint*)&(new_mesh->id_texture_coords));
 
-		new_mesh->num_texture_coords = new_mesh->num_vertices;
+		new_mesh->num_texture_coords = mesh->mNumVertices; //Same size as vertices
 		new_mesh->texture_coords = new float[new_mesh->num_texture_coords * 2];
-
-		aiVector3D* vector = mesh->mTextureCoords[0];
-
-		for (uint i = 0; i < new_mesh->num_texture_coords * 2; i += 2)
+		for (int uvs_item = 0; uvs_item < new_mesh->num_texture_coords; uvs_item++)
 		{
-			new_mesh->texture_coords[i] = vector->x;
-			new_mesh->texture_coords[i + 1] = vector->y;
-			vector++;
+			memcpy(&new_mesh->texture_coords[uvs_item * 2], &mesh->mTextureCoords[0][uvs_item].x, sizeof(float));
+			memcpy(&new_mesh->texture_coords[(uvs_item * 2) + 1], &mesh->mTextureCoords[0][uvs_item].y, sizeof(float));
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_texture_coords);

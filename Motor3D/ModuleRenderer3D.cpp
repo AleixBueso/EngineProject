@@ -190,37 +190,35 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	glColor4f(1, 1, 1, 1);
 	glPushMatrix();
 
-	if(transform)
+	if (transform)
 		glMultMatrixf(*transform->GetTransformationMatrix().v);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
+	glEnable(GL_TEXTURE_2D);
 
 	if (mesh)
 	{
-		if (App->model_loader->texture_enabled == false)
-			glDisable(GL_TEXTURE_2D);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_texture_coords);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
-
 		if (material != NULL)
 		{
-			glEnable(GL_TEXTURE_2D);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_texture_coords);
+			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 			glBindTexture(GL_TEXTURE_2D, material->texture_id);
 		}
 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
+
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
 	}
-	
-	
 
+	if (App->model_loader->texture_enabled == false)
+		glDisable(GL_TEXTURE_2D);
+
+	//glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
