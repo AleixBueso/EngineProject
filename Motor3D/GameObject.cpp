@@ -28,13 +28,6 @@ GameObject::~GameObject()
 
 void GameObject::Update(float dt)
 {
-	//Inherit Transformation
-	if (parent && parent->transform && this->transform)
-	{
-		math::float4x4 new_matrix = transform->GetTransformationMatrix() + parent->transform->GetTransformationMatrix();
-		transform->SetTransformation(new_matrix);
-	}
-
 	vector<Component*>::iterator it = components.begin();
 	while (it != components.end())
 	{

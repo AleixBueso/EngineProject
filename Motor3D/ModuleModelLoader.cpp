@@ -77,7 +77,6 @@ GameObject* ModuleModelLoader::LoadPath(const char* full_path)
 	if (scene)
 	{
 		ret = LoadNode(scene->mRootNode, scene, App->gameobject_manager->root);
-		//App->gameobject_manager->root->childs.push_back(ret);
 	}
 
 	aiReleaseImport(scene);
@@ -225,7 +224,6 @@ GameObject* ModuleModelLoader::LoadNode(const aiNode* node, const aiScene* scene
 	comp_trans->SetTranslation(position.x, position.y, position.z);
 	comp_trans->SetScale(scalar.x, scalar.y, scalar.z);
 	comp_trans->SetRotation(rotation.x, rotation.y, rotation.z, rotation.w);
-	
 
 	if (scene->HasMeshes() == true)
 	{

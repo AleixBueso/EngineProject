@@ -191,11 +191,13 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	glPushMatrix();
 
 	if (transform)
-		glMultMatrixf(*transform->GetTransformationMatrix().v);
+		glMultMatrixf(*transform->GetLocalTransformationMatrix().v);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnable(GL_TEXTURE_2D);
+
+	if (App->model_loader->texture_enabled)
+		glEnable(GL_TEXTURE_2D);
 
 	if (mesh)
 	{
@@ -210,15 +212,20 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 			glBindTexture(GL_TEXTURE_2D, material->texture_id);
 		}
 
+		else
+			glBindTexture(GL_TEXTURE_2D, 0);
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
 
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
+
+		if (mesh->parent->name == "Line002")
+		{
+			LOG("Line found");
+		}
 	}
 
-	if (App->model_loader->texture_enabled == false)
-		glDisable(GL_TEXTURE_2D);
-
-	//glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 

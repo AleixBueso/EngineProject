@@ -8,6 +8,7 @@ ComponentTransform::ComponentTransform(component_type type, GameObject* game_obj
 	scale.Set(1, 1, 1);
 	rotation_degree.Set(0, 0, 0);
 	rotation.Set(0, 0, 0, 0);
+
 }
 
 ComponentTransform::~ComponentTransform()
@@ -97,14 +98,19 @@ float3 ComponentTransform::GetRotation()
 	return tmp;
 }
 
-float4x4 ComponentTransform::GetTransformationMatrix()
+float4x4 ComponentTransform::GetLocalTransformationMatrix()
 {
-	return transformation.Transposed();
+	return local_transformation.Transposed();
+}
+
+float4x4 ComponentTransform::GetGlobalTransformationMatrix()
+{
+	return global_transformation.Transposed();
 }
 
 void ComponentTransform::SetTransformation()
 {
-	transformation = transformation.FromTRS(position, rotation, scale);
+	local_transformation = local_transformation.FromTRS(position, rotation, scale);
 }
 
 void ComponentTransform::ComponentEditor()
@@ -130,10 +136,11 @@ void ComponentTransform::ComponentEditor()
 
 void ComponentTransform::Update(float dt)
 {
+
 	SetTransformation();
 }
 
 void ComponentTransform::SetTransformation(math::float4x4 new_matrix)
 {
-	transformation = new_matrix;
+	local_transformation = new_matrix;
 }

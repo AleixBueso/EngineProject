@@ -28,7 +28,8 @@ public:
 	void SetRotation(float x, float y, float z, float w);
 	float3 GetRotation();
 
-	float4x4 GetTransformationMatrix();
+	float4x4 GetLocalTransformationMatrix();
+	float4x4 GetGlobalTransformationMatrix();
 	void SetTransformation(math::float4x4 new_matrix);
 
 	void SetTransformation();
@@ -46,8 +47,10 @@ public:
 
 	math::float3 rotation_euler = math::float3::zero;
 
-	float4x4 transformation = float4x4::identity;
 	float4x4 final_transformation = float4x4::identity;
+
+	float4x4 local_transformation = float4x4::identity;
+	float4x4 global_transformation = float4x4::identity;
 	 
 };
 
