@@ -30,6 +30,7 @@ public:
 
 	float4x4 GetLocalTransformationMatrix();
 	float4x4 GetGlobalTransformationMatrix();
+	void SetGlobalTransformationMatrix(math::float4x4 new_matrix);
 	void SetTransformation(math::float4x4 new_matrix);
 
 	void SetTransformation();

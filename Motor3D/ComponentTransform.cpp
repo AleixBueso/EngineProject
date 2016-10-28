@@ -108,6 +108,11 @@ float4x4 ComponentTransform::GetGlobalTransformationMatrix()
 	return global_transformation.Transposed();
 }
 
+void ComponentTransform::SetGlobalTransformationMatrix(math::float4x4 new_matrix)
+{
+	global_transformation = new_matrix;
+}
+
 void ComponentTransform::SetTransformation()
 {
 	local_transformation = local_transformation.FromTRS(position, rotation, scale);

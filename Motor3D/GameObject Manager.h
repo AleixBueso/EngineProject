@@ -17,6 +17,7 @@ public:
 
 	GameObject* CreateGameObject(GameObject* parent = NULL);
 	void Delete(GameObject* GO_to_delete);
+	void SetTransformHierarchy(const GameObject* game_object);
 	
 	public:
 	GameObject* root = NULL;

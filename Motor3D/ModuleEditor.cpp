@@ -207,6 +207,7 @@ void ModuleEditor::ShowChilds(GameObject* parent)
 					ImGui::TreePop();
 				}
 			}
+
 			else
 			{
 				if (ImGui::TreeNodeEx((*it)->name.data(), ImGuiTreeNodeFlags_Leaf))

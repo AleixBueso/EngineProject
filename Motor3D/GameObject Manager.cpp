@@ -73,5 +73,36 @@ update_status GameObjectManager::Update(float dt)
 		App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
 		it++;
 	}
+
+	SetTransformHierarchy(root);
+
 	return update_status::UPDATE_CONTINUE;
+}
+
+void GameObjectManager::SetTransformHierarchy(const GameObject* game_object)
+{
+	if (game_object == *root->childs.begin())
+		game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
+
+	if (game_object->transform)
+	{
+		if (game_object->parent)
+		{
+			if (game_object->parent->transform)
+				game_object->transform->SetGlobalTransformationMatrix((game_object->transform->GetLocalTransformationMatrix().Transposed() * game_object->parent->transform->GetGlobalTransformationMatrix().Transposed()));
+		}
+
+		else
+			game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
+	}
+
+	if (game_object->childs.size())
+	{
+		list<GameObject*>::const_iterator it = game_object->childs.begin();
+		while (it != game_object->childs.end())
+		{
+			SetTransformHierarchy(*it);
+			it++;
+		}
+	}
 }

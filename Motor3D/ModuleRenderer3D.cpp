@@ -191,7 +191,7 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	glPushMatrix();
 
 	if (transform)
-		glMultMatrixf(*transform->GetLocalTransformationMatrix().v);
+		glMultMatrixf(*transform->GetGlobalTransformationMatrix().v);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
