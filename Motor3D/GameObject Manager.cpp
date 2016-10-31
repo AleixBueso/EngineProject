@@ -89,7 +89,7 @@ void GameObjectManager::SetTransformHierarchy(const GameObject* game_object)
 		if (game_object->parent)
 		{
 			if (game_object->parent->transform)
-				game_object->transform->SetGlobalTransformationMatrix((game_object->transform->GetLocalTransformationMatrix().Transposed() * game_object->parent->transform->GetGlobalTransformationMatrix().Transposed()));
+				game_object->transform->SetGlobalTransformationMatrix(game_object->parent->transform->GetGlobalTransformationMatrix().Transposed() * game_object->transform->GetLocalTransformationMatrix().Transposed());
 		}
 
 		else
