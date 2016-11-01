@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
 #include "SDL\include\SDL.h"
 
 #include "Imgui\imgui.h"
@@ -29,14 +28,10 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	//App->model_loader->LoadPath("Models/Tank.fbx");
 	App->model_loader->LoadPath("Models/Town/Street environment_V01.fbx");
-	//MyMesh* mesh = new MyMesh();
-	//App->model_loader->CreateCube(mesh);
-
-	//lenna_id = App->model_loader->LoadTexture("lenna.png");
 
 	//App->gameobject_manager->CreateGameObject();
+
 	
 
 	return ret;

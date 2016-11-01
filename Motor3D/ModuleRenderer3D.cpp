@@ -218,16 +218,90 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
 
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
+		
+		//App->renderer3D->RenderBoundingBox(mesh->GetGlobalBox(), Green);
 
-		if (mesh->parent->name == "Line002")
-		{
-			LOG("Line found");
-		}
 	}
+
 
 	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glPopMatrix();
+
+		
+}
+
+void ModuleRenderer3D::DrawBox(const float3 * corners, Color color)
+{
+	glColor3f(color.r, color.g, color.b);
+
+	glBegin(GL_QUADS);
+
+	glVertex3fv((GLfloat*)&corners[1]);
+	glVertex3fv((GLfloat*)&corners[5]);
+	glVertex3fv((GLfloat*)&corners[7]);
+	glVertex3fv((GLfloat*)&corners[3]);
+
+	glVertex3fv((GLfloat*)&corners[4]);
+	glVertex3fv((GLfloat*)&corners[0]);
+	glVertex3fv((GLfloat*)&corners[2]);
+	glVertex3fv((GLfloat*)&corners[6]);
+
+	glVertex3fv((GLfloat*)&corners[5]);
+	glVertex3fv((GLfloat*)&corners[4]);
+	glVertex3fv((GLfloat*)&corners[6]);
+	glVertex3fv((GLfloat*)&corners[7]);
+
+	glVertex3fv((GLfloat*)&corners[0]);
+	glVertex3fv((GLfloat*)&corners[1]);
+	glVertex3fv((GLfloat*)&corners[3]);
+	glVertex3fv((GLfloat*)&corners[2]);
+
+	glVertex3fv((GLfloat*)&corners[3]);
+	glVertex3fv((GLfloat*)&corners[7]);
+	glVertex3fv((GLfloat*)&corners[6]);
+	glVertex3fv((GLfloat*)&corners[2]);
+
+	glVertex3fv((GLfloat*)&corners[0]);
+	glVertex3fv((GLfloat*)&corners[4]);
+	glVertex3fv((GLfloat*)&corners[5]);
+	glVertex3fv((GLfloat*)&corners[1]);
+
+	glEnd();
+}
+
+void ModuleRenderer3D::RenderBoundingBox(const math::AABB & aabb, Color color)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDisable(GL_CULL_FACE);
+
+	static float3 corners[8];
+	aabb.GetCornerPoints(corners);
+
+	DrawBox(corners, color);
+}
+
+update_status ModuleRenderer3D::Update(float dt)
+{
+	/*float3 corners[] = {
+		float3(0,0,0),
+		float3(1, 0, 0),
+		float3(1, 1, 0),
+		float3(0, 1, 0)
+	};
+
+	glBegin(GL_LINES);
+	glVertex2f(10, 10);
+	glVertex2f(20, 20);
+	glEnd();
+
+	GLuint vbo;
+	glGenBuffers(1, &vbo); // Generate 1 buffer
+	glBindBuffer(GL_LINE, vbo);
+	glBufferData(GL_LINE, sizeof(corners), corners, GL_STATIC_DRAW);
+*/
+
+	return update_status::UPDATE_CONTINUE;
 }

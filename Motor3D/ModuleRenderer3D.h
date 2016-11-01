@@ -23,6 +23,7 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
+	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -30,6 +31,8 @@ public:
 
 	void DrawMesh(ComponentMesh* mesh = NULL, ComponentTransform* transfrom = NULL, ComponentMaterial* material = NULL);
 	bool LoadMeshBuffer(const MyMesh* mesh);
+	void DrawBox(const float3 * corners, Color color);
+	void RenderBoundingBox(const math::AABB & aabb, Color color);
 
 public:
 

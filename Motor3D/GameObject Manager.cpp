@@ -66,14 +66,16 @@ void GameObjectManager::Delete(GameObject* GO_to_delete)
 
 update_status GameObjectManager::Update(float dt)
 {
-	list<GameObject*>::const_iterator it = all_gameobjects.begin();
-	while (it != all_gameobjects.end())
+	if (all_gameobjects.size() > 0)
 	{
-		(*it)->Update(dt);
-		App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
-		it++;
+		list<GameObject*>::const_iterator it = all_gameobjects.begin();
+		while (it != all_gameobjects.end())
+		{
+			(*it)->Update(dt);
+			App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+			it++;
+		}
 	}
-
 	SetTransformHierarchy(root);
 
 	return update_status::UPDATE_CONTINUE;
@@ -81,8 +83,11 @@ update_status GameObjectManager::Update(float dt)
 
 void GameObjectManager::SetTransformHierarchy(const GameObject* game_object)
 {
-	if (game_object == *root->childs.begin())
-		game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
+	if (root->childs.size())
+	{
+		if (game_object == *root->childs.begin())
+			game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
+	}
 
 	if (game_object->transform)
 	{
@@ -96,7 +101,7 @@ void GameObjectManager::SetTransformHierarchy(const GameObject* game_object)
 			game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
 	}
 
-	if (game_object->childs.size())
+	if (game_object->childs.size() > 0)
 	{
 		list<GameObject*>::const_iterator it = game_object->childs.begin();
 		while (it != game_object->childs.end())
