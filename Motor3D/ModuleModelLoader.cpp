@@ -231,6 +231,7 @@ GameObject* ModuleModelLoader::LoadNode(const aiNode* node, const aiScene* scene
 		{
 			ComponentMesh* comp_mesh = (ComponentMesh*)game_object->CreateComponent(component_type::COMPONENT_MESH, 0);
 			comp_mesh->mesh = LoadMesh2(scene->mMeshes[node->mMeshes[i]], scene, game_object);
+			comp_mesh->local_collider.Enclose((float3*)comp_mesh->mesh->vertices, comp_mesh->mesh->num_vertices);
 		}
 	}
 

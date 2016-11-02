@@ -16,17 +16,23 @@ ComponentMesh::ComponentMesh(component_type type, GameObject* game_object)
 {
 	this->type = type;
 	parent = game_object;
+	local_collider.SetNegativeInfinity();
+	global_collider.SetNegativeInfinity();
 }
 
 void ComponentMesh::Update(float dt)
 {
-	local_collider.Enclose((float3*)mesh->vertices, mesh->num_vertices);
 	CalculateFinalBB();
 }
 
 math::AABB ComponentMesh::GetGlobalBox()
 {
 	return global_collider;
+}
+
+math::AABB ComponentMesh::GetLocalBox()
+{
+	return local_collider;
 }
 
 ComponentMesh::~ComponentMesh()
