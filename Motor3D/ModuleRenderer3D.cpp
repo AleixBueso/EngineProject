@@ -111,7 +111,6 @@ bool ModuleRenderer3D::Init()
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT, 60);
 
 	ImGui_ImplSdlGL3_Init(App->window->window);
-	App->camera->Look(vec(1.75f, 1.75f, 5.0f), vec(0.0f, 0.0f, 0.0f));
 
 	LOG("OpenGL version: %s", glGetString(GL_VERSION));
 	LOG("Glew version: %s", glewGetString(GLEW_VERSION));
@@ -126,11 +125,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
-
-	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
-
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
@@ -218,19 +212,20 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
 
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
-	}
 
-	glPopMatrix();
-
-	if (mesh)
-	{
-		App->renderer3D->RenderBoundingBox(mesh->GetGlobalBox(), Green);
-		App->renderer3D->RenderBoundingBox(mesh->GetLocalBox(), Yellow);
+		App->renderer3D->RenderBoundingBox(mesh->local_collider, Yellow);
 	}
 
 	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glPopMatrix();
+
+	if (mesh)
+		App->renderer3D->RenderBoundingBox(mesh->global_collider, Green);
+
+	
 }
 
 void ModuleRenderer3D::DrawBox(const float3 * corners, Color color)
@@ -272,6 +267,8 @@ void ModuleRenderer3D::DrawBox(const float3 * corners, Color color)
 	glVertex3fv((GLfloat*)&corners[5]);
 	glVertex3fv((GLfloat*)&corners[1]);
 	glEnd();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
 }
 
 void ModuleRenderer3D::RenderBoundingBox(const math::AABB & box, Color color)

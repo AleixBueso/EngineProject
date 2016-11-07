@@ -1,6 +1,10 @@
 #pragma once
-#include "Module.h"
+#ifndef CAMERA
+#define CAMERA
+
 #include "Globals.h"
+#include "Component.h"
+#include "GameObject.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 #include <list>
 #include "p2Point.h"
@@ -19,14 +23,13 @@ enum Direction
 	GO_DOWN
 };
 
-class ModuleCamera3D : public Module
+class ComponentCamera : public Component
 {
 public:
-	ModuleCamera3D(Application* app, bool start_enabled = true);
-	~ModuleCamera3D();
+	ComponentCamera(component_type type, GameObject* game_object);
+	~ComponentCamera();
 
-	bool Start();
-	update_status Update(float dt);
+	void Update(float dt);
 	bool CleanUp();
 
 	void Look(const vec &Position, const vec &Reference, bool RotateAroundReference = false);
@@ -37,19 +40,17 @@ public:
 
 	void Rotate(float x, float y);
 
-
 	//Transform a 3D point to a point of the screen
-	void From3Dto2D(vec point, int& x, int& y); 
-
-private:
-
-	void CalculateViewMatrix();
+	void From3Dto2D(vec point, int& x, int& y);
 
 public:
-	
+	math::Frustum frustum;
 	vec X, Y, Z, Position, Reference;
 
 private:
-
+	void CalculateViewMatrix();
 	float4x4 ViewMatrix, ViewMatrixInverse;
 };
+
+#endif // CAMERA
+

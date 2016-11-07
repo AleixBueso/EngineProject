@@ -19,10 +19,6 @@ bool ModuleEditor::Start()
 	LOG("Loading Editor");
 	bool ret = true;
 
-	//Set Camera Position
-	App->camera->Move(vec(10.0f, 6.0f, 30.0f));
-	App->camera->LookAt(vec(0, 0, 0));
-
 	ShowTestWindow = false;
 	SelectedObject = App->gameobject_manager->root;
 

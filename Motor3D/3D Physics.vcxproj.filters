@@ -45,9 +45,6 @@
     <ClInclude Include="ModuleAudio.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleCamera3D.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleInput.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -321,12 +318,12 @@
     <ClInclude Include="EditorWindowModule.h">
       <Filter>Sources\GameObject System</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleInput.cpp">
@@ -510,6 +507,9 @@
       <Filter>Sources\GameObject System</Filter>
     </ClCompile>
     <ClCompile Include="EditorWindowModule.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
       <Filter>Sources\GameObject System</Filter>
     </ClCompile>
   </ItemGroup>

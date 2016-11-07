@@ -3,6 +3,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 
 using namespace std;
 
@@ -73,6 +74,12 @@ Component* GameObject::CreateComponent(component_type type, uint id_num)
 		return mesh;
 	}
 
+	if (type == COMPONENT_CAMERA)
+	{
+		camera = new ComponentCamera(type, this);
+		components.push_back(camera);
+		return camera;
+	}
 }
 
 bool GameObject::DeleteComponent(Component* ComponentToDelete)
@@ -125,4 +132,9 @@ void GameObject::RemoveChild(GameObject* child)
 			childs.erase(it);
 		it++;
 	}
+}
+
+void GameObject::SetAsCamera()
+{
+	camera = CreateComponent(COMPONENT_CAMERA, 0);
 }

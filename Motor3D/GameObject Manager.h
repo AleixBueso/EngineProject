@@ -16,6 +16,7 @@ public:
 	update_status Update(float dt);
 
 	GameObject* CreateGameObject(GameObject* parent = NULL);
+	GameObject* CreateCamera(GameObject* parent = NULL);
 	void Delete(GameObject* GO_to_delete);
 	void SetTransformHierarchy(const GameObject* game_object);
 	
