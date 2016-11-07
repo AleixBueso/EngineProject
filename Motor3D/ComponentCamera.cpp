@@ -14,6 +14,7 @@ ComponentCamera::ComponentCamera(component_type type, GameObject* game_object)
 
 	Position = vec(0.0f, 0.0f, 5.0f);
 	Reference = vec(0.0f, 0.0f, 0.0f);
+
 }
 
 ComponentCamera::~ComponentCamera()
@@ -24,7 +25,7 @@ ComponentCamera::~ComponentCamera()
 void ComponentCamera::Update(float dt)
 {
 	// Debug camera mode: Disabled for the final game (but better keep the code)
-
+/*
 	vec newPos(0, 0, 0);
 	float speed = 3.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
@@ -85,6 +86,10 @@ void ComponentCamera::Update(float dt)
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
+
+	static float3 corners[8];
+	frustum.GetCornerPoints(corners);
+	App->renderer3D->DrawBox(corners, Green);*/
 }
 
 void ComponentCamera::Look(const vec &Position, const vec &Reference, bool RotateAroundReference)
