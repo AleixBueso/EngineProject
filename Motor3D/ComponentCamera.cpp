@@ -3,6 +3,7 @@
 #include "Module.h"
 
 #include "SDL\include\SDL_opengl.h"
+#include "MathGeoLib\include\MathGeoLib.h"
 #include "Imgui\imgui.h"
 
 ComponentCamera::ComponentCamera(component_type type, GameObject* game_object)
@@ -76,6 +77,37 @@ void ComponentCamera::SetHFov(float value)
 void ComponentCamera::SetVFov(float value)
 {
 	frustum.SetVerticalFovAndAspectRatio((value * DEGTORAD), frustum.AspectRatio());
+}
+
+bool ComponentCamera::CheckIntersections(const AaBox& refBox) const
+{
+	Vector3f vCorner[8];
+	int iTotalIn = 0;
+	refBox.GetVertices(vCorner); // get the corners of the box into the vCorner array
+								 // test all 8 corners against the 6 sides
+								 // if all points are behind 1 specific plane, we are out
+								 // if we are in with all points, then we are fully in
+	for (int p = 0; p < 6; ++p) {
+		int iInCount = 8;
+		int iPtIn = 1;
+		for (int i = 0; i < 8; ++i) {
+			// test this point against the planes
+			if (m_plane[p].SideOfPlane(vCorner[i]) == BEHIND) {
+				iPtIn = 0;
+				--iInCount;
+			}
+		}
+		// were all the points outside of plane p?
+		If(iInCount == 0)
+			return(OUT);
+		// check if they were all on the right side of the plane
+		iTotalIn += iPtIn;
+	}
+	// so if iTotalIn is 6, then all are inside the view
+	if (iTotalIn == 6)
+		return(IN);
+	// we must be partly in then otherwise
+	return(INTERSECT);
 }
 
 void ComponentCamera::ComponentEditor()

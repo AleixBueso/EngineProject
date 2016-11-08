@@ -24,6 +24,7 @@ public:
 
 	void ComponentEditor();
 
+	bool CheckIntersections(const AaBox& refBox) const;
 	void DrawFrustum();
 	void Update(float dt);
 
