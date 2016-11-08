@@ -29,7 +29,6 @@ Component::Component(component_type Type, GameObject* from) : type(Type), parent
 
 	if (Type == COMPONENT_MATERIAL)
 		new ComponentMaterial(Type, from);
-
 }
 
 Component::~Component()

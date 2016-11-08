@@ -51,6 +51,7 @@ GameObject* GameObjectManager::CreateCamera()
 {
 	GameObject* tmp = new GameObject(root);
 	tmp->CreateComponent(COMPONENT_CAMERA, 0);
+	tmp->CreateComponent(COMPONENT_TRANSFORM, 0);
 	string name = "Camera " + std::to_string(camera_num);
 	tmp->name = name.data();	
 	root->AddChild(tmp);

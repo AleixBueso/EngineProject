@@ -32,6 +32,7 @@ public:
 	void DrawMesh(ComponentMesh* mesh = NULL, ComponentTransform* transfrom = NULL, ComponentMaterial* material = NULL);
 	bool LoadMeshBuffer(const MyMesh* mesh);
 	void DrawBox(const float3 * corners, Color color);
+	void DrawFrustum(const Frustum frustum, Color color);
 	void RenderBoundingBox(const math::AABB & aabb, Color color);
 
 public:

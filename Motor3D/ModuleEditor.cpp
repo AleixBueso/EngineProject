@@ -170,13 +170,20 @@ void ModuleEditor::AttributeEditor()
 		if (ImGui::CollapsingHeader("Mesh"));
 		{
 			if (SelectedObject->mesh != nullptr)
-			{
-				if (SelectedObject->mesh != NULL)
 					SelectedObject->mesh->ComponentEditor();
 				
-				else
-					ImGui::Text("No mesh component.");
-			}
+			else
+				ImGui::Text("No mesh component.");
+		}
+
+		//Mesh
+		if (ImGui::CollapsingHeader("Camera"));
+		{
+			if (SelectedObject->camera != nullptr)
+					SelectedObject->camera->ComponentEditor();
+
+			else
+				ImGui::Text("No camera component.");
 		}
 	}
 

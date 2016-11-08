@@ -27,11 +27,12 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+
 	App->gameobject_manager->CreateCamera();
 
 	App->model_loader->LoadPath("Models/Town/Street environment_V01.fbx");
-	//App->model_loader->LoadPath("Models/test_scene.fbx");
 
+	//App->model_loader->LoadPath("Models/test_scene.fbx");
 	//App->gameobject_manager->CreateGameObject();
 
 	

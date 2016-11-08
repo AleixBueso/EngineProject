@@ -273,6 +273,24 @@ void ModuleRenderer3D::DrawBox(const float3 * corners, Color color)
 	glEnd();
 }
 
+void ModuleRenderer3D::DrawFrustum(const Frustum frustum, Color color)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+
+	static float3 corners[8];
+	frustum.GetCornerPoints(corners);
+
+	DrawBox(corners, color);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 void ModuleRenderer3D::RenderBoundingBox(const math::AABB & box, Color color)
 {
 	
