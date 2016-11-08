@@ -36,6 +36,7 @@ public:
 	Component* transform = nullptr;
 	Component* material = nullptr;
 	Component* mesh = nullptr;
+	Component* camera = nullptr;
 
 	std::vector<Component*> components;
 	GameObject* parent;

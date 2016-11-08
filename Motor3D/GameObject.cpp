@@ -3,6 +3,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 
 using namespace std;
 
@@ -45,6 +46,8 @@ void GameObject::AddComponent(Component* component)
 		material = component;
 	if (component->type == COMPONENT_MESH)
 		mesh = component;
+	if (component->type == COMPONENT_CAMERA)
+		camera = component;
 
 	components.push_back(component);
 }
@@ -71,6 +74,13 @@ Component* GameObject::CreateComponent(component_type type, uint id_num)
 		mesh = new ComponentMesh(type, this);
 		components.push_back(mesh);
 		return mesh;
+	}
+
+	if (type == COMPONENT_CAMERA)
+	{
+		camera = new ComponentCamera(type, this);
+		components.push_back(camera);
+		return camera;
 	}
 
 }

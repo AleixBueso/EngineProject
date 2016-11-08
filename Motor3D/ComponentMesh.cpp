@@ -53,7 +53,7 @@ void ComponentMesh::ComponentEditor()
 
 void ComponentMesh::CalculateFinalBB()
 {
-	OBB obb = local_collider.Transform(parent->transform->GetGlobalTransformationMatrix());
+	OBB obb = local_collider.Transform(parent->transform->GetGlobalTransformationMatrix().Transposed());
 
 	//Transformation
 	global_collider = obb.MinimalEnclosingAABB();

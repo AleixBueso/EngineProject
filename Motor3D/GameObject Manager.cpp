@@ -47,6 +47,20 @@ GameObject* GameObjectManager::CreateGameObject(GameObject* parent)
 	return tmp;
 }
 
+GameObject* GameObjectManager::CreateCamera()
+{
+	GameObject* tmp = new GameObject(root);
+	tmp->CreateComponent(COMPONENT_CAMERA, 0);
+	string name = "Camera " + std::to_string(camera_num);
+	tmp->name = name.data();	
+	root->AddChild(tmp);
+
+	camera_num++;
+	all_gameobjects.push_back(tmp);
+
+	return tmp;
+}
+
 void GameObjectManager::Delete(GameObject* GO_to_delete)
 {
 	if (GO_to_delete->childs.empty() == false)
@@ -83,10 +97,13 @@ update_status GameObjectManager::Update(float dt)
 
 void GameObjectManager::SetTransformHierarchy(const GameObject* game_object)
 {
-	if (root->childs.size())
+	if (game_object->transform)
 	{
-		if (game_object == *root->childs.begin())
-			game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
+		if (root->childs.size())
+		{
+			if (game_object == *root->childs.begin())
+				game_object->transform->SetGlobalTransformationMatrix(game_object->transform->GetLocalTransformationMatrix().Transposed());
+		}
 	}
 
 	if (game_object->transform)
