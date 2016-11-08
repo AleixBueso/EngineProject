@@ -1,11 +1,13 @@
-#include "ComponentCamera.h"
+#include "Globals.h"
 #include "Application.h"
+#include "ModuleCamera3D.h"
 
-ComponentCamera::ComponentCamera(component_type type, GameObject* game_object)
+#include "SDL\include\SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	this->type = type;
-	this->parent = game_object;
-
 	CalculateViewMatrix();
 
 	X = vec(1.0f, 0.0f, 0.0f);
@@ -16,30 +18,46 @@ ComponentCamera::ComponentCamera(component_type type, GameObject* game_object)
 	Reference = vec(0.0f, 0.0f, 0.0f);
 }
 
-ComponentCamera::~ComponentCamera()
-{
+ModuleCamera3D::~ModuleCamera3D()
+{}
 
+// -----------------------------------------------------------------
+bool ModuleCamera3D::Start()
+{
+	LOG("Setting up the camera");
+	bool ret = true;
+
+	return ret;
 }
 
-void ComponentCamera::Update(float dt)
+// -----------------------------------------------------------------
+bool ModuleCamera3D::CleanUp()
+{
+	LOG("Cleaning camera");
+
+	return true;
+}
+
+// -----------------------------------------------------------------
+update_status ModuleCamera3D::Update(float dt)
 {
 	// Debug camera mode: Disabled for the final game (but better keep the code)
 
-	vec newPos(0, 0, 0);
+	vec newPos(0,0,0);
 	float speed = 3.0f * dt;
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 16.0f * dt;
+	
+	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
-
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
 
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
-
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+	
 	Position += newPos;
 	Reference += newPos;
 
@@ -85,9 +103,12 @@ void ComponentCamera::Update(float dt)
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
+
+	return UPDATE_CONTINUE;
 }
 
-void ComponentCamera::Look(const vec &Position, const vec &Reference, bool RotateAroundReference)
+// -----------------------------------------------------------------
+void ModuleCamera3D::Look(const vec &Position, const vec &Reference, bool RotateAroundReference)
 {
 	this->Position = Position;
 	this->Reference = Reference;
@@ -98,7 +119,7 @@ void ComponentCamera::Look(const vec &Position, const vec &Reference, bool Rotat
 	X.Normalize();
 	Y = Z.Cross(X);
 
-	if (!RotateAroundReference)
+	if(!RotateAroundReference)
 	{
 		this->Reference = this->Position;
 		this->Position += Z * 0.05f;
@@ -106,7 +127,9 @@ void ComponentCamera::Look(const vec &Position, const vec &Reference, bool Rotat
 
 	CalculateViewMatrix();
 }
-void ComponentCamera::LookAt(const vec &Spot)
+
+// -----------------------------------------------------------------
+void ModuleCamera3D::LookAt( const vec &Spot)
 {
 	Reference = Spot;
 
@@ -121,7 +144,7 @@ void ComponentCamera::LookAt(const vec &Spot)
 
 
 // -----------------------------------------------------------------
-void ComponentCamera::Move(const vec &Movement)
+void ModuleCamera3D::Move(const vec &Movement)
 {
 	Position += Movement;
 	Reference += Movement;
@@ -129,7 +152,7 @@ void ComponentCamera::Move(const vec &Movement)
 	CalculateViewMatrix();
 }
 // ------------------------------------------------------------------
-void ComponentCamera::Move(Direction d, float speed)
+void ModuleCamera3D::Move(Direction d, float speed)
 {
 	vec newPos(0, 0, 0);
 	switch (d)
@@ -157,19 +180,19 @@ void ComponentCamera::Move(Direction d, float speed)
 }
 
 // -----------------------------------------------------------------
-float* ComponentCamera::GetViewMatrix()
+float* ModuleCamera3D::GetViewMatrix()
 {
 	return *ViewMatrix.v;
 }
 
 // -----------------------------------------------------------------
-void ComponentCamera::CalculateViewMatrix()
+void ModuleCamera3D::CalculateViewMatrix()
 {
-	ViewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -(X.Dot(Position)), -(Y.Dot(Position)), -(Z.Dot(Position)), 1.0f);
+	ViewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -(X.Dot( Position)), -(Y.Dot(Position)), -(Z.Dot(Position)), 1.0f);
 	ViewMatrixInverse = ViewMatrix.Inverted();
 }
 
-void ComponentCamera::Rotate(float x, float y)
+void ModuleCamera3D::Rotate(float x, float y)
 {
 	int dx = -x;
 	int dy = -y;
@@ -181,7 +204,7 @@ void ComponentCamera::Rotate(float x, float y)
 	if (dx != 0)
 	{
 		float DeltaX = (float)dx * Sensitivity;
-
+	
 		Quat quaternion;
 		quaternion.RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX);
 
@@ -210,8 +233,9 @@ void ComponentCamera::Rotate(float x, float y)
 
 	CalculateViewMatrix();
 }
+// -----------------------------------------------------------------
 
-void ComponentCamera::From3Dto2D(vec point, int& x, int& y)
+void ModuleCamera3D::From3Dto2D(vec point, int& x, int& y)
 {
 	//Calculate perspective
 	float4x4 perspective;
@@ -238,7 +262,9 @@ void ComponentCamera::From3Dto2D(vec point, int& x, int& y)
 	screen.x /= screen.z;
 	screen.y /= screen.z;
 
-	x = (screen.x + 1) * (SCREEN_WIDTH / 2);
-	y = (screen.y + 1) * (SCREEN_HEIGHT / 2);
+	x = (screen.x +1) * (SCREEN_WIDTH /2);
+	y = (screen.y + 1) * (SCREEN_HEIGHT /2);
 }
+
+// -----------------------------------------------------------------
 

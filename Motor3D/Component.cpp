@@ -5,7 +5,6 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
-#include "ComponentCamera.h"
 
 Component::Component()
 {
@@ -26,9 +25,6 @@ Component::Component(component_type Type, GameObject* from) : type(Type), parent
 
 	if (Type == COMPONENT_MATERIAL)
 		new ComponentMaterial(Type, from);
-
-	if (Type == COMPONENT_CAMERA)
-		new ComponentCamera(Type, from);
 
 }
 

@@ -10,6 +10,7 @@
 #include "ModuleAudio.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModuleModelLoader.h"
 #include "GameObject Manager.h"
@@ -22,6 +23,7 @@ public:
 	ModuleAudio* audio;
 	ModuleSceneIntro* scene_intro;
 	ModuleRenderer3D* renderer3D;
+	ModuleCamera3D* camera;
 	ModuleEditor* editor;
 	ModuleModelLoader* model_loader;
 	GameObjectManager* gameobject_manager;
@@ -47,8 +49,7 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+	
 };
 
-extern Application* App;
-
-#endif
+#endif // !__APPLICATION_H__

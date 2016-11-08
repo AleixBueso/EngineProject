@@ -22,7 +22,6 @@ public:
 	Component* CreateComponent(component_type type, uint id_num);
 	bool DeleteComponent(Component* ComponentToDelete);
 	Component* GetById(uint id);
-	void SetAsCamera();
 
 	GameObject* Duplicate(const GameObject GO_to_duplicate);
 	void SetParent(GameObject* parent);
@@ -37,7 +36,6 @@ public:
 	Component* transform = nullptr;
 	Component* material = nullptr;
 	Component* mesh = nullptr;
-	Component* camera = nullptr;
 
 	std::vector<Component*> components;
 	GameObject* parent;
