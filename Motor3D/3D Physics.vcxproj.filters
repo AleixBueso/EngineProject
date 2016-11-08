@@ -37,9 +37,6 @@
     <Filter Include="Sources\GameObject System">
       <UniqueIdentifier>{4e43d7d5-b0ba-45a9-ae18-eec5a3aec82d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\GameObject System\Component Types">
-      <UniqueIdentifier>{4a258a3b-87fa-463d-89f9-adbbecbe8c7b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -309,17 +306,20 @@
     <ClInclude Include="GameObject Manager.h">
       <Filter>Sources\GameObject System</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentCamera.h">
-      <Filter>Sources\GameObject System\Component Types</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentMaterial.h">
-      <Filter>Sources\GameObject System\Component Types</Filter>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\GameObject System</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMesh.h">
-      <Filter>Sources\GameObject System\Component Types</Filter>
+      <Filter>Sources\GameObject System</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentTransform.h">
-      <Filter>Sources\GameObject System\Component Types</Filter>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorWindowModule.h">
+      <Filter>Sources\GameObject System</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Sources\GameObject System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -497,17 +497,20 @@
     <ClCompile Include="GameObject Manager.cpp">
       <Filter>Sources\GameObject System</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentCamera.cpp">
-      <Filter>Sources\GameObject System\Component Types</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentMaterial.cpp">
-      <Filter>Sources\GameObject System\Component Types</Filter>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\GameObject System</Filter>
     </ClCompile>
     <ClCompile Include="ComponentMesh.cpp">
-      <Filter>Sources\GameObject System\Component Types</Filter>
+      <Filter>Sources\GameObject System</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentTransform.cpp">
-      <Filter>Sources\GameObject System\Component Types</Filter>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorWindowModule.cpp">
+      <Filter>Sources\GameObject System</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Sources\GameObject System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
