@@ -199,6 +199,7 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	if (App->model_loader->texture_enabled)
 		glEnable(GL_TEXTURE_2D);
 
+	
 	if (mesh)
 	{
 

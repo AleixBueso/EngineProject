@@ -14,8 +14,8 @@ public:
 	ComponentMesh(GameObject* game_object);
 	ComponentMesh(component_type type, GameObject* game_object);
 	void Update(float dt);
-	math::AABB GetGlobalBox();
-	math::AABB GetLocalBox();
+	const math::AABB GetGlobalBox();
+	const math::AABB GetLocalBox();
 	~ComponentMesh();
 
 	void CalculateFinalBB();

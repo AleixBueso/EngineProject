@@ -143,47 +143,37 @@ void ModuleEditor::AttributeEditor()
 		// Change the name
 		//char* new_name = new char[20];
 		//strcpy(new_name, SelectedObject->name.data());
-		ImGui::Text("Name");
+		ImGui::Text("Name: ");
+		ImGui::SameLine();
+		ImGui::Text(SelectedObject->name.data());
 		//SelectedObject->name = new_name;
 
 		//Transformation
-		if (ImGui::CollapsingHeader("Transformation"));
+		if (SelectedObject->transform != nullptr)
 		{
-			if (SelectedObject->transform != NULL)
+			if (ImGui::CollapsingHeader("Transformation"));
 				SelectedObject->transform->ComponentEditor();
-
-			else
-				ImGui::Text("No transformation component.");
 		}
 
-		// Material
-		if (ImGui::CollapsingHeader("Material"));
+		// Material		
+		if (SelectedObject->material != nullptr)
 		{
-			if (SelectedObject->material != NULL)
+			if (ImGui::CollapsingHeader("Material"));
 				SelectedObject->material->ComponentEditor();
-
-			else
-				ImGui::Text("No material component.");
 		}
 
 		//Mesh
-		if (ImGui::CollapsingHeader("Mesh"));
+		if (SelectedObject->mesh != nullptr)
 		{
-			if (SelectedObject->mesh != nullptr)
-					SelectedObject->mesh->ComponentEditor();
-				
-			else
-				ImGui::Text("No mesh component.");
+			if (ImGui::CollapsingHeader("Mesh"));
+				SelectedObject->mesh->ComponentEditor();
 		}
 
 		//Mesh
-		if (ImGui::CollapsingHeader("Camera"));
+		if (SelectedObject->camera != nullptr)
 		{
-			if (SelectedObject->camera != nullptr)
-					SelectedObject->camera->ComponentEditor();
-
-			else
-				ImGui::Text("No camera component.");
+			if (ImGui::CollapsingHeader("Camera"));
+				SelectedObject->camera->ComponentEditor();
 		}
 	}
 

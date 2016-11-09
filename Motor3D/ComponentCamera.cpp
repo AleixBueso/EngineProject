@@ -1,3 +1,4 @@
+#include "Globals.h"
 #include "ComponentCamera.h"
 #include "Application.h"
 #include "Module.h"
@@ -29,11 +30,18 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Update(float dt)
 {
+	list<GameObject*>::const_iterator it = App->gameobject_manager->all_gameobjects.begin();
+	while (it != App->gameobject_manager->all_gameobjects.end())
+	{
+		if ((*it)->mesh)
+		{
+			if (CheckIntersection((*it)->mesh->GetGlobalBox()))
+				game_objects_draw.push_back(*it);
+		}
+		it++;
+	}
+	
 	DrawFrustum();
-	/*near_plane = frustum.NearPlaneDistance();
-	far_plane = frustum.FarPlaneDistance();
-	horizontal_fov = frustum.HorizontalFov();
-	vertical_fov = frustum.VerticalFov();*/
 }
 
 void ComponentCamera::DrawFrustum()
@@ -62,52 +70,30 @@ const vec ComponentCamera::GetPos() const
 void ComponentCamera::SetNearPlane(float value)
 {
 	frustum.SetViewPlaneDistances(value, frustum.FarPlaneDistance());
+	near_plane = frustum.NearPlaneDistance();
 }
 
 void ComponentCamera::SetFarPlane(float value)
 {
 	frustum.SetViewPlaneDistances(frustum.NearPlaneDistance(), value);
+	far_plane = frustum.FarPlaneDistance();
 }
 
 void ComponentCamera::SetHFov(float value)
 {
 	frustum.SetVerticalFovAndAspectRatio(frustum.AspectRatio(), (value * DEGTORAD));
+	horizontal_fov = frustum.HorizontalFov();
 }
 
 void ComponentCamera::SetVFov(float value)
 {
 	frustum.SetVerticalFovAndAspectRatio((value * DEGTORAD), frustum.AspectRatio());
+	vertical_fov = frustum.VerticalFov();
 }
 
-bool ComponentCamera::CheckIntersections(const AaBox& refBox) const
+bool ComponentCamera::CheckIntersection(const math::AABB& refBox) const
 {
-	Vector3f vCorner[8];
-	int iTotalIn = 0;
-	refBox.GetVertices(vCorner); // get the corners of the box into the vCorner array
-								 // test all 8 corners against the 6 sides
-								 // if all points are behind 1 specific plane, we are out
-								 // if we are in with all points, then we are fully in
-	for (int p = 0; p < 6; ++p) {
-		int iInCount = 8;
-		int iPtIn = 1;
-		for (int i = 0; i < 8; ++i) {
-			// test this point against the planes
-			if (m_plane[p].SideOfPlane(vCorner[i]) == BEHIND) {
-				iPtIn = 0;
-				--iInCount;
-			}
-		}
-		// were all the points outside of plane p?
-		If(iInCount == 0)
-			return(OUT);
-		// check if they were all on the right side of the plane
-		iTotalIn += iPtIn;
-	}
-	// so if iTotalIn is 6, then all are inside the view
-	if (iTotalIn == 6)
-		return(IN);
-	// we must be partly in then otherwise
-	return(INTERSECT);
+	return frustum.Intersects(refBox);
 }
 
 void ComponentCamera::ComponentEditor()

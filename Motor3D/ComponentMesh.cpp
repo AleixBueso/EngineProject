@@ -25,12 +25,12 @@ void ComponentMesh::Update(float dt)
 	CalculateFinalBB();
 }
 
-math::AABB ComponentMesh::GetGlobalBox()
+const math::AABB ComponentMesh::GetGlobalBox()
 {
 	return global_collider;
 }
 
-math::AABB ComponentMesh::GetLocalBox()
+const math::AABB ComponentMesh::GetLocalBox()
 {
 	return local_collider;
 }

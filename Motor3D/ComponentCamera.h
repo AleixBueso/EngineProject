@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "Component.h"
 #include "GameObject.h"
+#include <vector>
 #include "MathGeoLib\include\MathGeoLib.h"
 
 class ComponentCamera : public Component
@@ -24,7 +25,7 @@ public:
 
 	void ComponentEditor();
 
-	bool CheckIntersections(const AaBox& refBox) const;
+	bool CheckIntersection(const math::AABB & refBox) const;
 	void DrawFrustum();
 	void Update(float dt);
 
@@ -36,6 +37,7 @@ private:
 	float far_plane;
 	float horizontal_fov;
 	float vertical_fov;
+	std::list<GameObject*> game_objects_draw;
 };
 
 #endif // CAMERA

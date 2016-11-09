@@ -28,6 +28,7 @@ public:
 	virtual void Disable();
 	virtual void ComponentEditor() {};
 	virtual void SetTransformation(math::float4x4 new_matrix) {};
+	virtual const math::AABB GetGlobalBox() { return math::AABB(vec{ 0,0,0 }, vec{ 0,0,0 }); };
 	virtual math::float4x4 GetLocalTransformationMatrix() { math::float4x4 ret = math::float4x4::identity; return ret; };
 	virtual math::float4x4 GetGlobalTransformationMatrix() { math::float4x4 ret = math::float4x4::identity; return ret; };
 	virtual void SetGlobalTransformationMatrix(math::float4x4 new_matrix) {};
