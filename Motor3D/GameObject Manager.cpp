@@ -85,32 +85,38 @@ update_status GameObjectManager::Update(float dt)
 	if (all_gameobjects.size() > 0)
 	{
 
+		if (MainCamera->camera->GetCullingActive())
+		{
+			list<GameObject*>::const_iterator to_draw_it = MainCamera->camera->GetDrawList()->begin();
+			while (to_draw_it != MainCamera->camera->GetDrawList()->end())
+			{
+				App->renderer3D->DrawMesh((ComponentMesh*)(*to_draw_it)->mesh, (ComponentTransform*)(*to_draw_it)->transform, (ComponentMaterial*)(*to_draw_it)->material);
+				to_draw_it++;
+			}
+		}
+
+	else
+	{
 		list<GameObject*>::const_iterator it = all_gameobjects.begin();
 		while (it != all_gameobjects.end())
 		{
-			(*it)->Update(dt);
-
-			if (MainCamera->camera->GetCullingActive())
-			{
-				list<GameObject*>::const_iterator to_draw_it = MainCamera->camera->GetDrawList()->begin();
-				while (to_draw_it != MainCamera->camera->GetDrawList()->end())
-				{
-					if ((*to_draw_it) == (*it))
-						App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
-
-					to_draw_it++;
-				}
-			}
-
-			else
-				App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+			App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
 
 			it++;
 		}
 	}
+
+	list<GameObject*>::const_iterator it = all_gameobjects.begin();
+	while (it != all_gameobjects.end())
+	{
+			(*it)->Update(dt);
+			it++;
+	}
+
 	SetTransformHierarchy(root);
 
 	return update_status::UPDATE_CONTINUE;
+	}
 }
 
 void GameObjectManager::SetTransformHierarchy(const GameObject* game_object)

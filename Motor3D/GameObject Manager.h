@@ -15,18 +15,18 @@ public:
 	bool Start();
 	update_status Update(float dt);
 
-	GameObject* CreateGameObject(GameObject* parent = NULL);
+	GameObject* CreateGameObject(GameObject* parent = nullptr);
 	GameObject* CreateCamera();
 	void Delete(GameObject* GO_to_delete);
 	void SetTransformHierarchy(const GameObject* game_object);
 	
 	public:
-	GameObject* root = NULL;
+	GameObject* root = nullptr;
+	GameObject* MainCamera = nullptr;
 	std::list<GameObject*> all_gameobjects;
 
 private:
 	uint camera_num = 1;
-	GameObject* MainCamera;
 
 };
 

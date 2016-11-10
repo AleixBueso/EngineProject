@@ -226,7 +226,14 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	glPopMatrix();
 
 	if (mesh)
-		App->renderer3D->RenderBoundingBox(mesh->GetGlobalBox(), Green);
+	{
+		if(std::find(App->gameobject_manager->MainCamera->camera->GetDrawList()->begin(), App->gameobject_manager->MainCamera->camera->GetDrawList()->end(), mesh->parent) != App->gameobject_manager->MainCamera->camera->GetDrawList()->end())
+			App->renderer3D->RenderBoundingBox(mesh->GetGlobalBox(), Red);
+
+		else
+			App->renderer3D->RenderBoundingBox(mesh->GetGlobalBox(), Green);
+		
+	}
 
 	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);

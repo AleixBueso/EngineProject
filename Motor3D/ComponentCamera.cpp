@@ -37,8 +37,12 @@ void ComponentCamera::Update(float dt)
 		if ((*it)->mesh)
 		{
 			if (CheckIntersection((*it)->mesh->GetGlobalBox()))
+			{
 				game_objects_draw.push_back(*it);
-		}
+				game_objects_draw.sort();
+				game_objects_draw.unique();
+			}
+		}				
 		it++;
 	}
 	
