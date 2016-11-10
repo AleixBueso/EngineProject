@@ -21,6 +21,7 @@ ComponentCamera::ComponentCamera(component_type type, GameObject* game_object)
 	frustum.SetUp({ 0, 1, 0 });
 	frustum.SetViewPlaneDistances(5, 50);
 	frustum.SetPerspective(DEGTORAD * horizontal_fov, DEGTORAD * horizontal_fov);
+	CullingActive = false;
 }
 
 ComponentCamera::~ComponentCamera()
@@ -65,6 +66,11 @@ const float ComponentCamera::GetFarPlane() const
 const vec ComponentCamera::GetPos() const
 {
 	return frustum.Pos();
+}
+
+bool ComponentCamera::GetCullingActive()
+{
+	return CullingActive;
 }
 
 void ComponentCamera::SetNearPlane(float value)
@@ -113,4 +119,11 @@ void ComponentCamera::ComponentEditor()
 	float new_VFov = vertical_fov;
 	if (ImGui::DragFloat("Vertical FOV", &new_VFov, 0.2f))
 		SetVFov(new_VFov);
+
+	if (ImGui::Checkbox("Frustum Culling", &CullingActive));
+}
+
+const std::list<GameObject*>* ComponentCamera::GetDrawList() const
+{
+	return &game_objects_draw;
 }

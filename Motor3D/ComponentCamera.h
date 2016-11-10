@@ -17,11 +17,13 @@ public:
 	const float GetNearPlane() const;
 	const float GetFarPlane() const;
 	const float3 GetPos() const;
+	bool GetCullingActive();
 
 	void SetNearPlane(float value);
 	void SetFarPlane(float value);
 	void SetHFov(float value);
 	void SetVFov(float value);
+	const std::list<GameObject*>* GetDrawList() const;
 
 	void ComponentEditor();
 
@@ -31,12 +33,14 @@ public:
 
 public:
 	math::Frustum frustum;
+	bool CullingActive;
 
 private:
 	float near_plane;
 	float far_plane;
 	float horizontal_fov;
 	float vertical_fov;
+
 	std::list<GameObject*> game_objects_draw;
 };
 

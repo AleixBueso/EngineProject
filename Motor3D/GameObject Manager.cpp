@@ -55,6 +55,7 @@ GameObject* GameObjectManager::CreateCamera()
 	string name = "Camera " + std::to_string(camera_num);
 	tmp->name = name.data();	
 	root->AddChild(tmp);
+	MainCamera = tmp;
 
 	camera_num++;
 	all_gameobjects.push_back(tmp);
@@ -83,11 +84,27 @@ update_status GameObjectManager::Update(float dt)
 {
 	if (all_gameobjects.size() > 0)
 	{
+
 		list<GameObject*>::const_iterator it = all_gameobjects.begin();
 		while (it != all_gameobjects.end())
 		{
 			(*it)->Update(dt);
-			App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+
+			if (MainCamera->camera->GetCullingActive())
+			{
+				list<GameObject*>::const_iterator to_draw_it = MainCamera->camera->GetDrawList()->begin();
+				while (to_draw_it != MainCamera->camera->GetDrawList()->end())
+				{
+					if ((*to_draw_it) == (*it))
+						App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+
+					to_draw_it++;
+				}
+			}
+
+			else
+				App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+
 			it++;
 		}
 	}

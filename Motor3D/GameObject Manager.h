@@ -26,6 +26,7 @@ public:
 
 private:
 	uint camera_num = 1;
+	GameObject* MainCamera;
 
 };
 

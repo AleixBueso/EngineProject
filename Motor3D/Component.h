@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "MathGeoLib\include\MathGeoLib.h"
+#include <list>
 
 
 class GameObject;
@@ -32,6 +33,9 @@ public:
 	virtual math::float4x4 GetLocalTransformationMatrix() { math::float4x4 ret = math::float4x4::identity; return ret; };
 	virtual math::float4x4 GetGlobalTransformationMatrix() { math::float4x4 ret = math::float4x4::identity; return ret; };
 	virtual void SetGlobalTransformationMatrix(math::float4x4 new_matrix) {};
+
+	virtual bool GetCullingActive() { return false; };
+	virtual const std::list<GameObject*>* GetDrawList() const { return nullptr; };
 
 public:
 
