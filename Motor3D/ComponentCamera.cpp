@@ -50,8 +50,10 @@ void ComponentCamera::Update(float dt)
 		}				
 		it++;
 	}
-	
+
+	frustum.Transform(parent->transform->GetGlobalTransformationMatrix());
 	DrawFrustum();
+	
 
 }
 
