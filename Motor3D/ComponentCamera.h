@@ -29,6 +29,7 @@ public:
 
 	bool CheckIntersection(const math::AABB & refBox) const;
 	void DrawFrustum();
+	void PreUpdate(float dt);
 	void Update(float dt);
 
 public:

@@ -29,8 +29,15 @@ ComponentCamera::~ComponentCamera()
 
 }
 
+void ComponentCamera::PreUpdate(float dt)
+{
+	game_objects_draw.clear();
+}
+
 void ComponentCamera::Update(float dt)
 {
+	game_objects_draw.clear();
+
 	list<GameObject*>::const_iterator it = App->gameobject_manager->all_gameobjects.begin();
 	while (it != App->gameobject_manager->all_gameobjects.end())
 	{
@@ -39,14 +46,13 @@ void ComponentCamera::Update(float dt)
 			if (CheckIntersection((*it)->mesh->GetGlobalBox()))
 			{
 				game_objects_draw.push_back(*it);
-				game_objects_draw.sort();
-				game_objects_draw.unique();
 			}
 		}				
 		it++;
 	}
 	
 	DrawFrustum();
+
 }
 
 void ComponentCamera::DrawFrustum()

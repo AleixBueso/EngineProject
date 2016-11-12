@@ -1054,23 +1054,40 @@ bool Frustum::Intersects(const LineSegment &lineSegment) const
 
 bool Frustum::Intersects(const AABB &aabb) const
 {
-	float3 points[8];
-	aabb.GetCornerPoints(points);
+	bool ret = true;
 
-	Plane planes[6];
-	GetPlanes(planes);
+	vec vertex[8];
+	aabb.GetCornerPoints(vertex);
 
-	// Discard boxes with all points outside
-	int out;
-	for (int i = 0; i < 6; ++i)
+	Plane f_planes[6];
+
+	f_planes[0] = NearPlane();
+	f_planes[1] = FarPlane();
+	f_planes[2] = LeftPlane();
+	f_planes[3] = RightPlane();
+	f_planes[4] = BottomPlane();
+	f_planes[5] = TopPlane();
+
+	for (unsigned int i = 0; i < 6; i++)
 	{
-		out = 0;
-		for (int k = 0; k < 8; ++k)
-			out += planes[i].IsOnPositiveSide(points[k]);
+		unsigned int in_count = 8;
 
-		if (out == 8)
-			return false;
+		for (unsigned int j = 0; j < 8; j++)
+		{
+			if (f_planes[i].IsOnPositiveSide(vertex[j]) == true)
+			{
+				in_count--;
+			}
+		}
+
+		if (in_count == 0)
+		{
+			ret = false;
+			return ret;
+		}
 	}
+
+	return ret;
 
 	return true;
 }

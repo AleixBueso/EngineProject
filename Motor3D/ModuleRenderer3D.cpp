@@ -219,8 +219,6 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh->id_indices);
 
 		glDrawElements(GL_TRIANGLES, mesh->mesh->num_indices, GL_UNSIGNED_INT, NULL);
-
-		App->renderer3D->RenderBoundingBox(mesh->GetLocalBox(), Yellow);
 	}
 
 	glPopMatrix();
