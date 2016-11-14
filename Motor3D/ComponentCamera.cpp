@@ -51,18 +51,18 @@ void ComponentCamera::Update(float dt)
 		it++;
 	}
 
-	frustum.Transform(parent->transform->GetGlobalTransformationMatrix());
 	DrawFrustum();
 	
-
 }
 
 void ComponentCamera::DrawFrustum()
 {
-	glPushMatrix();
-	glMultMatrixf(*parent->transform->GetGlobalTransformationMatrix().v);
+	frustum.Transform(parent->transform->GetGlobalTransformationMatrix().Transposed());
+
+	//glPushMatrix();
+	//glMultMatrixf(*parent->transform->GetGlobalTransformationMatrix().v);
 	App->renderer3D->DrawFrustum(frustum, Red);
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 const float ComponentCamera::GetNearPlane() const
