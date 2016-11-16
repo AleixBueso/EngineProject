@@ -31,7 +31,7 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::PreUpdate(float dt)
 {
-	game_objects_draw.clear();
+
 }
 
 void ComponentCamera::Update(float dt)

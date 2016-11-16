@@ -124,19 +124,28 @@ void ComponentTransform::ComponentEditor()
 	ImGui::Text("Position");
 	ImGui::Text("     X           Y            Z");
 	if (ImGui::DragFloat3("pos", new_pos.ptr(), 0.5f))
-		SetTranslation(new_pos);
+	{
+		if(parent->is_static == false)
+			SetTranslation(new_pos);
+	}
 
 	float3 new_scale = scale;
 	ImGui::Text("Scale");
 	ImGui::Text("     X           Y            Z");
 	if (ImGui::DragFloat3("scl", new_scale.ptr(), 0.5f))
-		SetScale(new_scale);
+	{
+		if (parent->is_static == false)
+			SetScale(new_scale);
+	}
 
 	float3 new_rotation = rotation_degree;
 	ImGui::Text("Rotation");
 	ImGui::Text("     X           Y            Z");
 	if (ImGui::DragFloat3("rot", new_rotation.ptr(), 0.5f), 360, -360)
-		SetRotation(new_rotation);
+	{
+		if (parent->is_static == false)
+			SetRotation(new_rotation);
+	}
 }
 
 void ComponentTransform::Update(float dt)

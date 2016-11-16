@@ -38,6 +38,8 @@ public:
 	Component* mesh = nullptr;
 	Component* camera = nullptr;
 
+	bool is_static = false;
+
 	std::vector<Component*> components;
 	GameObject* parent;
 	std::list<GameObject*> childs;

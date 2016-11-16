@@ -327,6 +327,9 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>Sources\GameObject System\Components</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -520,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Sources\GameObject System\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Sources\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
