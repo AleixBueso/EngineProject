@@ -40,6 +40,8 @@ public:
 
 	bool is_static = false;
 
+	UINT32 UUID = 0;
+
 	std::vector<Component*> components;
 	GameObject* parent;
 	std::list<GameObject*> childs;

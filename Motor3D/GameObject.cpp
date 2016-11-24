@@ -17,6 +17,7 @@ GameObject::GameObject(GameObject* Parent, string Name) : parent(Parent), name(N
 	//transform = CreateComponent(component_type::COMPONENT_TRANSFORM, 0);
 	//material = CreateComponent(component_type::COMPONENT_MATERIAL, 0);
 	//mesh = CreateComponent(component_type::COMPONENT_MESH, 0);
+	UUID = rand();
 }
 
 GameObject::~GameObject()
