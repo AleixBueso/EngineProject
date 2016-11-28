@@ -8,19 +8,29 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 
 class GameObject;
+class MyQuadTree;
 
 class QuadTreeNode
 {
 public:
 	QuadTreeNode();
+	QuadTreeNode(MyQuadTree* tree);
 	~QuadTreeNode();
 
+	void Update();
+
+	void AddGameObject(GameObject* game_object);
+
+	GameObject* parent;
+	QuadTreeNode* childs[4];
+	math::AABB box;
+
+	uint max_capacity = 2;
+	MyQuadTree* tree_form;
 
 private:
-	math::AABB box;
 	std::list<GameObject*> gameObjects;
-	GameObject* parent;
-	GameObject* childs[4];
+
 };
 
 class MyQuadTree
@@ -33,7 +43,10 @@ public:
 	void Clear();
 	bool Insert(GameObject*);
 	bool Remove(GameObject*);
-	//bool Intersect(vector<GameObject*>&, PRIMITIVE);
+	void Update();
+
+	std::list<QuadTreeNode*> all_nodes;
+
 
 private:
 	QuadTreeNode* root = nullptr;

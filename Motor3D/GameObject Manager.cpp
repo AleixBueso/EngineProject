@@ -5,7 +5,8 @@
 
 GameObjectManager::GameObjectManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
+	quadtree = MyQuadTree();
+	quadtree.Create(math::AABB(vec(-1, -1, -1), vec(1, 1, 1)));
 }
 
 GameObjectManager::~GameObjectManager()
@@ -114,6 +115,8 @@ update_status GameObjectManager::Update(float dt)
 	}
 
 	SetTransformHierarchy(root);
+
+	quadtree.Update();
 
 	return update_status::UPDATE_CONTINUE;
 	}

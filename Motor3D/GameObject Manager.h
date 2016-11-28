@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Module.h"
 #include "GameObject.h"
+#include "QuadTree.h"
 
 class GameObjectManager : public Module
 {
@@ -27,6 +28,7 @@ public:
 
 private:
 	uint camera_num = 1;
+	MyQuadTree quadtree;
 
 };
 

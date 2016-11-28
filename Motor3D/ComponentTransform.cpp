@@ -115,7 +115,7 @@ void ComponentTransform::SetGlobalTransformationMatrix(math::float4x4 new_matrix
 
 void ComponentTransform::SetTransformation()
 {
-	local_transformation = local_transformation.FromTRS(position, rotation, scale);
+	local_transformation = float4x4::FromTRS(position, rotation, scale);
 }
 
 void ComponentTransform::ComponentEditor()
@@ -150,7 +150,6 @@ void ComponentTransform::ComponentEditor()
 
 void ComponentTransform::Update(float dt)
 {
-
 	SetTransformation();
 }
 

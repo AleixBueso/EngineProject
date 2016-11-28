@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "SDL\include\SDL.h"
+#include "QuadTree.h"
 
 #include "Imgui\imgui.h"
 #include "ModuleModelLoader.h"
