@@ -2,11 +2,11 @@
 #include"GameObject Manager.h"
 #include "GameObject.h"
 #include "Application.h"
+#include "Globals.h"
 
 GameObjectManager::GameObjectManager(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	quadtree = MyQuadTree();
-	quadtree.Create(math::AABB(vec(-1, -1, -1), vec(1, 1, 1)));
+	
 }
 
 GameObjectManager::~GameObjectManager()
@@ -83,6 +83,7 @@ void GameObjectManager::Delete(GameObject* GO_to_delete)
 
 update_status GameObjectManager::Update(float dt)
 {
+
 	if (all_gameobjects.size() > 0)
 	{
 
@@ -96,29 +97,52 @@ update_status GameObjectManager::Update(float dt)
 			}
 		}
 
-	else
-	{
-		list<GameObject*>::const_iterator it = all_gameobjects.begin();
-		while (it != all_gameobjects.end())
+		else
 		{
-			App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
+			list<GameObject*>::const_iterator it = all_gameobjects.begin();
+			while (it != all_gameobjects.end())
+			{
+				App->renderer3D->DrawMesh((ComponentMesh*)(*it)->mesh, (ComponentTransform*)(*it)->transform, (ComponentMaterial*)(*it)->material);
 
-			it++;
+				it++;
+			}
 		}
-	}
 
-	list<GameObject*>::const_iterator it = all_gameobjects.begin();
-	while (it != all_gameobjects.end())
+		list<GameObject*>::const_iterator update_it = all_gameobjects.begin();
+		while (update_it != all_gameobjects.end())
+		{
+			(*update_it)->Update(dt);
+			update_it++;
+		}
+
+		SetTransformHierarchy(root);
+
+		// QuadTree
+
+
+		if (new_mesh_charged)
+		{
+			SetQuadTree();
+			new_mesh_charged = false;
+		}
+
+		quadtree.Update();
+		
+
+		return update_status::UPDATE_CONTINUE;
+	}
+}
+
+void GameObjectManager::SetQuadTree()
+{
+	//Setup QuadTree
+	quadtree.Create(AABB(vec(-50, -50, -50), vec(50, 50, 50)));
+
+	list<GameObject*>::const_iterator tree_it = all_gameobjects.begin();
+	while (tree_it != all_gameobjects.end())
 	{
-			(*it)->Update(dt);
-			it++;
-	}
-
-	SetTransformHierarchy(root);
-
-	quadtree.Update();
-
-	return update_status::UPDATE_CONTINUE;
+		quadtree.Add((*tree_it));
+		tree_it++;
 	}
 }
 

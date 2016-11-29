@@ -20,16 +20,20 @@ public:
 	GameObject* CreateCamera();
 	void Delete(GameObject* GO_to_delete);
 	void SetTransformHierarchy(const GameObject* game_object);
+
 	
 	public:
 	GameObject* root = nullptr;
 	GameObject* MainCamera = nullptr;
 	std::list<GameObject*> all_gameobjects;
+	bool new_mesh_charged = false;
 
 private:
 	uint camera_num = 1;
 	MyQuadTree quadtree;
 
+
+	void SetQuadTree();
 };
 
 #endif // _GOMANAGER_H_

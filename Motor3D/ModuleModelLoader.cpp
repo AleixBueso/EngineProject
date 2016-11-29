@@ -81,6 +81,9 @@ GameObject* ModuleModelLoader::LoadPath(const char* full_path)
 
 	aiReleaseImport(scene);
 	scene = nullptr;
+
+	App->gameobject_manager->new_mesh_charged = true;
+
 	return ret;
 
 }

@@ -19,13 +19,14 @@ public:
 
 	void Update();
 
-	void AddGameObject(GameObject* game_object);
+	bool AddGameObject(GameObject* game_object);
+	void CollectIntersections(std::vector<GameObject*>& objects, AABB& primitive) const;
 
-	GameObject* parent;
+	QuadTreeNode* parent;
 	QuadTreeNode* childs[4];
 	math::AABB box;
 
-	uint max_capacity = 2;
+	uint max_capacity = 1;
 	MyQuadTree* tree_form;
 
 private:
@@ -46,6 +47,7 @@ public:
 	void Update();
 
 	std::list<QuadTreeNode*> all_nodes;
+	void Add(GameObject* game_object);
 
 
 private:
