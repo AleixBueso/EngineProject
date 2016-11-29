@@ -139,3 +139,23 @@ const std::list<GameObject*>* ComponentCamera::GetDrawList() const
 {
 	return &game_objects_draw;
 }
+
+/*void ComponentCamera::OnSave(Config& config) const
+{
+	config.AddFloat("FrustumFar", frustum.FarPlane());
+	config.AddFloat("FrustumNear", frustum.NearPlane());
+	config.AddFloat("FrustumHfov", frustum.HorizontalFov());
+	config.AddFloat("FrustumVfov", frustum.VerticalFov());
+}
+
+void ComponentCamera::OnLoad(Config * config)
+{
+	frustum.nearPlaneDistance = config->GetFloat("FrustumNear", 0.1f);
+	frustum.farPlaneDistance = config->GetFloat("FrustumFar", 1000.f);
+	frustum.horizontalFov = config->GetFloat("FrustumHfov", 1.f);
+	frustum.verticalFov = config->GetFloat("FrustumVfov", 1.f);
+	projection_changed = true;
+	// TODO: Set frustum.pos / front / up to current transformation
+
+}
+*/
