@@ -32,8 +32,8 @@ public:
 	void PreUpdate(float dt);
 	void Update(float dt);
 
-	void OnSave(Config& config) const;
-	void OnLoad(Config * config);
+	//void OnSave(Config& config) const;
+	//void OnLoad(Config * config);
 
 public:
 	math::Frustum frustum;
