@@ -52,7 +52,35 @@ void ComponentCamera::Update(float dt)
 	}
 
 	DrawFrustum();
+
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		GetPick();
+	}
 	
+}
+
+GameObject* ComponentCamera::GetPick()
+{
+	float width = (float)App->window->screen_surface->w;
+	float height = (float)App->window->screen_surface->h;
+
+	int mouse_x, mouse_y;
+	math::float2(App->input->GetMouseX(), App->input->GetMouseY());
+
+	float normalized_x = -(1.0f - (float(mouse_x) * 2.0f) / width);
+	float normalized_y = 1.0f - (float(mouse_y) * 2.0f) / height;
+
+	Ray = this->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+
+	float distance;
+	GameObject* hit = App->level->CastRay(Ray, distance);
+
+	if (hit != nullptr && hit_point != nullptr)
+		*hit_point = Ray.GetPoint(distance);
+
+	return hit;
 }
 
 void ComponentCamera::DrawFrustum()

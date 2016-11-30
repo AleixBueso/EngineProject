@@ -32,11 +32,14 @@ public:
 	void PreUpdate(float dt);
 	void Update(float dt);
 
+	GameObject* GetPick();
+
 	//void OnSave(Config& config) const;
 	//void OnLoad(Config * config);
 
 public:
 	math::Frustum frustum;
+	math::LineSegment Ray;
 	bool CullingActive;
 
 private:

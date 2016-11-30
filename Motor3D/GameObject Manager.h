@@ -27,6 +27,7 @@ public:
 	GameObject* MainCamera = nullptr;
 	std::list<GameObject*> all_gameobjects;
 	bool new_mesh_charged = false;
+	bool show_quadtree = false;
 
 private:
 	uint camera_num = 1;

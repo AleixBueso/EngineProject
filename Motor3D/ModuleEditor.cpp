@@ -232,6 +232,8 @@ void ModuleEditor::CreateHierarchy()
 	if (ImGui::Button("CreateGameObject"))
 		App->gameobject_manager->CreateGameObject(SelectedObject);
 
+	if (ImGui::Checkbox("Show QuadTree", &App->gameobject_manager->show_quadtree));
+
 	ImGui::Text("Tree: ----------------------------");
 
 	if (App->gameobject_manager->root == NULL)

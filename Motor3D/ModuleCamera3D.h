@@ -44,6 +44,7 @@ public:
 private:
 
 	void CalculateViewMatrix();
+	math::LineSegment Ray;
 
 public:
 	

@@ -126,7 +126,8 @@ update_status GameObjectManager::Update(float dt)
 			new_mesh_charged = false;
 		}
 
-		quadtree.Update();
+		if(show_quadtree)
+			quadtree.Update();
 		
 
 		return update_status::UPDATE_CONTINUE;
@@ -136,7 +137,7 @@ update_status GameObjectManager::Update(float dt)
 void GameObjectManager::SetQuadTree()
 {
 	//Setup QuadTree
-	quadtree.Create(AABB(vec(-50, -50, -50), vec(50, 50, 50)));
+	quadtree.Create(AABB(vec(-50, -25, -50), vec(50, 25, 50)));
 
 	list<GameObject*>::const_iterator tree_it = all_gameobjects.begin();
 	while (tree_it != all_gameobjects.end())
