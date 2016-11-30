@@ -101,14 +101,6 @@ update_status ModuleCamera3D::Update(float dt)
 		Position = Reference + Z * Position.Length();
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-	{
-		Ray.a = this->Position;
-		Ray.b = math::vec(App->input->GetMouseX(), App->input->GetMouseY(), App->input->GetMouseZ());
-	}
-
-	//Ray = dummy->frustum.UnProjectLineSegment(App->input->GetMouseX(), App->input->GetMouseY());
-
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
