@@ -339,7 +339,7 @@ MyMesh* ModuleModelLoader::LoadMesh2(const aiMesh* mesh, const aiScene* scene, G
 			complete_path = complete_path + path_2;
 			LOG("%s", complete_path.data());
 
-			comp_material->texture_id = App->model_loader->LoadTexture(complete_path.data());
+			comp_material->texture_id = App->model_loader->LoadTexture("Game\\textures\\blending_transparent_window.png");
 			comp_material->path = path.data;
 			LOG("Texture id %i Load: %s", comp_material->texture_id, path.data);
 		}

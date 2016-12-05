@@ -202,12 +202,24 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 	
 	if (mesh)
 	{
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		if (material != NULL)
 		{
+			if (material->texture_type == 1)
+			{
+				glEnable(GL_ALPHA_TEST);
+				glAlphaFunc(GL_GREATER, material->alpha_test);
+			}
+
+			if (material->texture_type == 2)
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh->id_texture_coords);
 			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 			glBindTexture(GL_TEXTURE_2D, material->texture_id);
@@ -233,6 +245,8 @@ void ModuleRenderer3D::DrawMesh(ComponentMesh* mesh, ComponentTransform* transfo
 		
 	}
 
+	glDisable(GL_BLEND);
+	glDisable(GL_ALPHA);
 	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);

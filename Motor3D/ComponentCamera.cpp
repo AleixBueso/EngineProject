@@ -63,7 +63,7 @@ void ComponentCamera::Update(float dt)
 
 GameObject* ComponentCamera::GetPick()
 {
-	float width = (float)App->window->screen_surface->w;
+	/*float width = (float)App->window->screen_surface->w;
 	float height = (float)App->window->screen_surface->h;
 
 	int mouse_x, mouse_y;
@@ -80,7 +80,9 @@ GameObject* ComponentCamera::GetPick()
 	if (hit != nullptr && hit_point != nullptr)
 		*hit_point = Ray.GetPoint(distance);
 
-	return hit;
+	return hit;*/
+
+	return nullptr;
 }
 
 void ComponentCamera::DrawFrustum()
